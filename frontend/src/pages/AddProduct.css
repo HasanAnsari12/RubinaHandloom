@@ -1,0 +1,75 @@
+/* frontend/src/pages/AddProduct.css */
+
+.add-product-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fffaf8 0%, #f7f1ed 100%);
+  padding: 60px 20px;
+}
+
+.add-product-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 50px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.add-product-card h1 {
+  color: #7b0f1a;
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.add-product-card p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 17px;
+}
+
+.add-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.add-product-form input,
+.add-product-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.add-product-form textarea {
+  resize: vertical;
+}
+
+.add-product-form button {
+  padding: 16px;
+  background: linear-gradient(135deg, #7b0f1a, #5a0a13);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.add-product-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(123, 15, 26, 0.25);
+}
+
+@media (max-width: 768px) {
+  .add-product-card {
+    padding: 35px 25px;
+  }
+
+  .add-product-card h1 {
+    font-size: 32px;
+  }
+}

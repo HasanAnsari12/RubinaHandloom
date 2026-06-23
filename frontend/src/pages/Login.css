@@ -1,0 +1,178 @@
+.login-page {
+  min-height: 100vh;
+  background: #f8f5f2;
+}
+.login-hero{
+  width:100%;
+  height:650px;
+
+  background-image:url("/images/login-banner.jpg");
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+
+  position:relative;
+}
+
+.login-card{
+  width:90%;
+  max-width:650px;
+
+  margin:-180px auto 60px;
+
+  background:white;
+  padding:50px;
+  border-radius:24px;
+
+  box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+  position:relative;
+  z-index:10;
+}
+.hero-overlay{
+  position:absolute;
+  inset:0;
+
+  background:rgba(90,0,0,.25);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+
+  text-align:center;
+  color:white;
+}
+.hero-overlay h1 {
+  font-size: 90px;
+  letter-spacing: 12px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.hero-overlay p {
+  font-size: 28px;
+  max-width: 850px;
+  margin: auto;
+  line-height: 1.6;
+}
+
+
+
+.login-logo {
+  text-align: center;
+  font-size: 38px;
+  color: #7b0f1a;
+  letter-spacing: 5px;
+  margin-bottom: 15px;
+}
+
+.login-card h2 {
+  text-align: center;
+  font-size: 52px;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 35px;
+  font-size: 18px;
+}
+
+.login-card label {
+  display: block;
+  margin-bottom: 8px;
+  margin-top: 18px;
+  color: #555;
+  font-weight: 500;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.login-card input:focus {
+  outline: none;
+  border-color: #7b0f1a;
+}
+
+.forgot-link {
+  text-align: right;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.forgot-link a {
+  color: #7b0f1a;
+  text-decoration: none;
+}
+
+.login-card button {
+  width: 100%;
+  margin-top: 20px;
+
+  padding: 18px;
+
+  border: none;
+
+  background: #7b0f1a;
+
+  color: white;
+
+  font-size: 18px;
+
+  font-weight: 600;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.login-card button:hover {
+  background: #5a0a13;
+  transform: translateY(-2px);
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.register-link a {
+  color: #7b0f1a;
+  font-weight: 600;
+}
+
+.login-error {
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 52px;
+  }
+
+  .hero-overlay p {
+    font-size: 20px;
+  }
+
+  .login-card {
+    width: 95%;
+    padding: 30px;
+    margin-top: -70px;
+  }
+
+  .login-card h2 {
+    font-size: 38px;
+  }
+}
