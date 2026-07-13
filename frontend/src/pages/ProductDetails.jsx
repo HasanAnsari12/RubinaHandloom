@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import "./ProductDetails.css";
 import { toast } from "react-toastify";
+
 function ProductDetails() {
   const { id } = useParams();
 
@@ -139,140 +140,219 @@ function ProductDetails() {
   ];
 
   if (loading) {
-    return <h2 className="pd-loading">Loading product...</h2>;
+    return (
+      <div className="pd-page">
+        <div className="pd-state-wrap">
+          <h2 className="pd-loading">Loading product...</h2>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <h2 className="pd-error">{error}</h2>;
+    return (
+      <div className="pd-page">
+        <div className="pd-state-wrap">
+          <h2 className="pd-error">{error}</h2>
+        </div>
+      </div>
+    );
   }
+
+  const isOutOfStock = product.stock === 0;
+  const isLowStock = product.stock > 0 && product.stock <= 3;
+  const hasDiscount = product.discountPrice > 0;
+  const hasRating = product.rating > 0;
 
   return (
     <div className="pd-page">
 
-    <button
-  className="pd-back-btn"
-  onClick={() => navigate(-1)}
->
-  ← Back
-</button>
-      <div className="pd-container">
-        {/* Left Side - Product Image Gallery */}
-        <div className="pd-image-section">
-          {/* Main Image */}
-          <img
-            src={selectedImage}
-            alt={product.title}
-            className="pd-main-image"
-          />
+      {/* ── Page Header: Back Navigation ── */}
+      <div className="pd-page-header">
+        <button className="pd-back-btn" onClick={() => navigate(-1)}>
+          ← Back
+        </button>
+        <nav className="pd-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span className="pd-breadcrumb__sep">/</span>
+          <a href="/products">Products</a>
+          <span className="pd-breadcrumb__sep">/</span>
+          <span className="pd-breadcrumb__current">{product.title}</span>
+        </nav>
+      </div>
 
-          {/* Thumbnail Images */}
-          <div className="pd-thumbnails">
-            {product.images?.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                alt={`${product.title} ${index + 1}`}
-                className={
-                  selectedImage === img
-                    ? "pd-thumbnail active"
-                    : "pd-thumbnail"
-                }
-                onClick={() => setSelectedImage(img)}
-              />
-            ))}
+      {/* ── Main Product Layout ── */}
+      <div className="pd-container">
+
+        {/* Left — Image Gallery */}
+        <div className="pd-image-section">
+          <div className="pd-main-image-wrap">
+            <img
+              src={selectedImage}
+              alt={product.title}
+              className="pd-main-image"
+            />
+            {isOutOfStock && (
+              <span className="pd-image-badge pd-image-badge--oos">Out of Stock</span>
+            )}
+            {!isOutOfStock && isLowStock && (
+              <span className="pd-image-badge pd-image-badge--low">Only {product.stock} left</span>
+            )}
           </div>
+
+          {/* Thumbnails */}
+          {product.images?.length > 1 && (
+            <div className="pd-thumbnails">
+              {product.images.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`${product.title} view ${index + 1}`}
+                  className={selectedImage === img ? "pd-thumbnail active" : "pd-thumbnail"}
+                  onClick={() => setSelectedImage(img)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Right Side - Product Info */}
+        {/* Right — Product Information */}
         <div className="pd-info-section">
-          <span className="pd-category-badge">
-            {product.category}
-          </span>
 
+          {/* 1. Category */}
+          {product.category && (
+            <span className="pd-category-badge">{product.category}</span>
+          )}
+
+          {/* 2. Title */}
           <h1 className="pd-title">{product.title}</h1>
 
-          <div className="pd-price">
-            ₹{product.price}
-          </div>
-          <div className="pd-rating">
-  ⭐⭐⭐⭐⭐
-  <span>(4.8 Rating)</span>
-</div>
-
-          <div className="pd-stock">
-            In Stock: {product.stock}
-          </div>
-
-          <p className="pd-description">
-            {product.description}
-          </p>
-            <div className="pd-quantity">
-              <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
-              <span>{quantity}</span>
-              <button onClick={() => setQuantity(q => q + 1)}>+</button>
+          {/* 3. Rating — real data from product.rating */}
+          {hasRating && (
+            <div className="pd-rating">
+              <span className="pd-rating__stars" aria-label={`Rating: ${product.rating} out of 5`}>
+                {"★".repeat(Math.round(product.rating))}
+                {"☆".repeat(5 - Math.round(product.rating))}
+              </span>
+              <span className="pd-rating__val">{product.rating} / 5</span>
             </div>
-            
+          )}
+
+          {/* 4. Price */}
+          <div className="pd-price-row">
+            {hasDiscount ? (
+              <>
+                <span className="pd-price pd-price--discount">
+                  ₹{product.discountPrice.toLocaleString("en-IN")}
+                </span>
+                <span className="pd-price pd-price--original">
+                  ₹{product.price.toLocaleString("en-IN")}
+                </span>
+              </>
+            ) : (
+              <span className="pd-price">
+                ₹{product.price?.toLocaleString("en-IN")}
+              </span>
+            )}
+          </div>
+
+          {/* 5. Stock Status */}
+          <div className="pd-stock-row">
+            {isOutOfStock ? (
+              <span className="pd-stock pd-stock--oos">Out of Stock</span>
+            ) : isLowStock ? (
+              <span className="pd-stock pd-stock--low">⚡ Only {product.stock} left</span>
+            ) : (
+              <span className="pd-stock pd-stock--in">✓ In Stock ({product.stock} available)</span>
+            )}
+          </div>
+
+          {/* 6. Description */}
+          <p className="pd-description">{product.description}</p>
+
+          <div className="pd-divider" />
+
+          {/* 7. Quantity Stepper */}
+          <div className="pd-quantity-row">
+            <span className="pd-quantity-label">Quantity</span>
+            <div className="pd-quantity">
+              <button
+                className="pd-qty-btn"
+                onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                aria-label="Decrease quantity"
+              >−</button>
+              <span className="pd-qty-val">{quantity}</span>
+              <button
+                className="pd-qty-btn"
+                onClick={() => setQuantity(q => q + 1)}
+                aria-label="Increase quantity"
+              >+</button>
+            </div>
+          </div>
+
+          {/* 8. Primary Actions */}
+          <div className="pd-action-group">
             <button
               onClick={handleAddToCart}
-              className="pd-add-to-cart-btn"
+              className="pd-btn pd-btn--cart"
+              disabled={isOutOfStock}
             >
-              Add to Cart
+              🛒 Add to Cart
             </button>
-
             <button
               onClick={handleBuyNow}
-              className="pd-buy-btn"
+              className="pd-btn pd-btn--buy"
+              disabled={isOutOfStock}
             >
               Buy Now
             </button>
+          </div>
 
-            <button
-              onClick={handleShareProduct}
-              className="pd-share-btn"
-            >
-              📤 Share Product
+          {/* 9. Secondary Actions */}
+          <div className="pd-secondary-actions">
+            <button onClick={handleWishlist} className="pd-btn pd-btn--wishlist">
+              ♡ Wishlist
             </button>
-            
-            <button
-              onClick={handleWishlist}
-              className="pd-wishlist-btn"
-            >
-              ❤️ Add to Wishlist
+            <button onClick={handleShareProduct} className="pd-btn pd-btn--share">
+              ↗ Share
             </button>
-<div className="pd-features">
+          </div>
 
-  <div>🚚 Free Delivery</div>
+          {/* 10. Trust Features */}
+          <div className="pd-features">
+            <div className="pd-feature-item">
+              <span className="pd-feature-icon">🚚</span>
+              <span>Free Delivery</span>
+            </div>
+            <div className="pd-feature-item">
+              <span className="pd-feature-icon">🔒</span>
+              <span>Secure Checkout</span>
+            </div>
+            <div className="pd-feature-item">
+              <span className="pd-feature-icon">💎</span>
+              <span>Premium Quality</span>
+            </div>
+          </div>
 
-  <div>🔒 Secure Checkout</div>
-
-  <div>💎 Premium Quality</div>
-
-</div>
         </div>
       </div>
 
       {/* Customer Reviews */}
       <section className="pd-reviews">
-        <h2>Customer Reviews</h2>
-
+        <h2 className="pd-reviews__title">Customer Reviews</h2>
         <div className="pd-reviews-grid">
           {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="pd-review-card"
-            >
-              <div className="pd-review-stars">
-                {"⭐".repeat(review.rating)}
+            <div key={review.id} className="pd-review-card">
+              <div className="pd-review-stars" aria-label={`${review.rating} stars`}>
+                {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
               </div>
-
-              <h4>{review.name}</h4>
-
-              <p>{review.comment}</p>
+              <h4 className="pd-review-name">{review.name}</h4>
+              <p className="pd-review-comment">{review.comment}</p>
             </div>
           ))}
         </div>
       </section>
-      
+
     </div>
   );
 }

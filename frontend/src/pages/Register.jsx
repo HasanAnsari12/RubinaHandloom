@@ -15,6 +15,8 @@ function Register() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -62,96 +64,150 @@ function Register() {
   };
 
   return (
-  <div className="register-page">
-    <div className="register-card">
+    <div className="register-page">
+      <div className="register-split-container">
+        {/* 45% Branding Panel */}
+        <div className="register-branding-panel">
+          <div className="hero-overlay">
+            <h2 className="branding-title">Create Your Account</h2>
+            <p className="branding-tagline">Join the world of timeless handwoven elegance.</p>
+          </div>
+        </div>
 
-      <h1>Welcome to<br />Rubina Handloom Sarees</h1>
+        {/* 55% Form Section */}
+        <div className="register-form-panel">
+          <div className="register-card">
+            <div className="register-logo-mobile">RUBINA</div>
+            <h2>Create Account</h2>
+            <p className="register-subtitle">
+              Start your handloom journey with Rubina.
+            </p>
 
-      <p className="register-subtitle">
-        Create your account to explore premium
-        Chanderi, Pattu Silk and Handloom Sarees.
-      </p>
+            {error && (
+              <p className="register-error">
+                {error}
+              </p>
+            )}
 
-      {error && (
-        <p
-          style={{
-            color: "red",
-            marginBottom: "15px",
-          }}
-        >
-          {error}
-        </p>
-      )}
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">Full Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your full name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  id="phone"
+                  type="text"
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-        />
+              <div className="form-group">
+                <label htmlFor="email">Email Address</label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <div className="password-input-wrapper">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Create a password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <div className="password-input-wrapper">
+                  <input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Confirm your password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  >
+                    {showConfirmPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
+              <button
+                type="submit"
+                className="register-submit-btn"
+                disabled={loading}
+              >
+                {loading ? "Creating Account..." : "Create Account"}
+              </button>
+            </form>
 
-        <button
-          type="submit"
-          disabled={loading}
-        >
-          {loading
-            ? "Creating Account..."
-            : "Create Account"}
-        </button>
-      </form>
+            {/* Trust Row */}
+            <div className="register-trust-row">
+              <div className="trust-cell">
+                <span className="trust-icon">🔒</span> Secure Registration
+              </div>
+              <div className="trust-cell">
+                <span className="trust-icon">🚚</span> Pan India Delivery
+              </div>
+              <div className="trust-cell">
+                <span className="trust-icon">🧵</span> Authentic Handloom
+              </div>
+            </div>
 
-      <p
-        style={{
-          marginTop: "20px",
-          textAlign: "center",
-        }}
-      >
-        Already have an account?{" "}
-        <Link to="/login">Login</Link>
-      </p>
-
+            <div className="login-link-footer">
+              Already have an account?{" "}
+              <Link to="/login">
+                Sign In
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default Register;

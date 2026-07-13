@@ -5,6 +5,8 @@ const {
 } = require("../controllers/adminController");
 
 const Product = require("../models/Product");
+const { protect } = require("../middleware/authMiddleware");
+const { admin } = require("../middleware/adminMiddleware");
 
 const multer = require("multer");
 const csv = require("csv-parser");
@@ -25,7 +27,7 @@ const upload = multer({
 ========================= */
 
 // GET /api/admin/stats
-router.get("/stats", getDashboardStats);
+router.get("/stats", protect, admin, getDashboardStats);
 
 /* =========================
    CSV UPLOAD ROUTE
@@ -33,6 +35,8 @@ router.get("/stats", getDashboardStats);
 
 router.post(
   "/upload-csv",
+  protect,
+  admin,
   upload.single("file"),
   async (req, res) => {
     try {

@@ -74,76 +74,104 @@ function Checkout() {
 
   return (
     <div className="checkout-page">
-      <button
-        className="back-btn"
-        onClick={() => navigate("/cart")}
-      >
-        ← Back To Cart
-      </button>
+      <header className="checkout-header">
+        <div className="checkout-header-content">
+          <h1 className="checkout-title">Secure Checkout</h1>
+          <p className="checkout-subtitle">Complete your order safely and securely.</p>
+        </div>
+      </header>
+
+      <div className="checkout-trust-bar">
+        <div className="trust-item">
+          <span className="trust-icon">🔒</span> Secure Checkout
+        </div>
+        <div className="trust-item">
+          <span className="trust-icon">🚚</span> Fast Delivery
+        </div>
+        <div className="trust-item">
+          <span className="trust-icon">🧵</span> Authentic Handloom
+        </div>
+      </div>
 
       <div className="checkout-container">
         {/* Address */}
         <div className="checkout-left">
-          <h2>📍 Select Delivery Address</h2>
+          <h2 className="section-title">Shipping Address</h2>
 
           {addresses.length === 0 ? (
             <div className="no-address">
               <p>Please add a delivery address before checkout.</p>
               <button
+                className="add-address-btn"
                 onClick={() => navigate("/account/address")}
               >
                 Add Address
               </button>
             </div>
           ) : (
-            addresses.map((address, index) => (
-              <div
-                key={index}
-                className={`address-box ${
-                  selectedAddress === index ? "active-address" : ""
-                }`}
-                onClick={() => setSelectedAddress(index)}
-              >
-                <h3>{address.fullName}</h3>
-                <p>{address.phone}</p>
-                <p>
-                  {address.house}, {address.area}
-                </p>
-                <p>
-                  {address.city}, {address.state}
-                </p>
-                <p>{address.pincode}</p>
-              </div>
-            ))
+            <div className="address-grid">
+              {addresses.map((address, index) => (
+                <div
+                  key={index}
+                  className={`address-box ${
+                    selectedAddress === index ? "active-address" : ""
+                  }`}
+                  onClick={() => setSelectedAddress(index)}
+                >
+                  <div className="address-header">
+                    <span className="radio-indicator"></span>
+                    <h3>{address.fullName}</h3>
+                  </div>
+                  <div className="address-details">
+                    <p className="phone-number">{address.phone}</p>
+                    <p className="address-lines">
+                      {address.house}, {address.area}<br />
+                      {address.city}, {address.state} - {address.pincode}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
 
         {/* Summary */}
         <div className="checkout-right">
-          <h2>Order Summary</h2>
+          <h2 className="section-title">Order Summary</h2>
 
-          <div className="summary-row">
-            <span>Subtotal</span>
-            <span>₹{subtotal}</span>
+          <div className="summary-details">
+            <div className="summary-row">
+              <span>Subtotal</span>
+              <span>₹{subtotal}</span>
+            </div>
+
+            <div className="summary-row">
+              <span>Shipping</span>
+              <span>₹{shipping}</span>
+            </div>
+
+            <div className="summary-row total">
+              <span>Total</span>
+              <span>₹{total}</span>
+            </div>
           </div>
 
-          <div className="summary-row">
-            <span>Shipping</span>
-            <span>₹{shipping}</span>
-          </div>
+          <div className="checkout-actions">
+            <button
+              className="payment-btn"
+              onClick={handlePlaceOrder}
+              disabled={isProcessingPayment}
+            >
+              {isProcessingPayment ? "Placing Order..." : "Place Order"}
+            </button>
 
-          <div className="summary-row total">
-            <span>Total</span>
-            <span>₹{total}</span>
+            <button
+              className="back-btn"
+              onClick={() => navigate("/cart")}
+            >
+              Back to Cart
+            </button>
           </div>
-
-          <button
-            className="payment-btn"
-            onClick={handlePlaceOrder}
-            disabled={isProcessingPayment}
-          >
-            {isProcessingPayment ? "Processing Payment..." : "Proceed to Payment"}
-          </button>
         </div>
       </div>
     </div>

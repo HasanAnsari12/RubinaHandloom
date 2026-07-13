@@ -1,16 +1,161 @@
+:root {
+  /* Colors - Luxury Premium Palette */
+  --primary: #8B4513;        /* Warm Saddle Brown */
+  --primary-hover: #73390f;  /* Darker Brown */
+  --secondary: #C69C6D;      /* Soft Bronze Gold */
+  --accent: #D4AF37;         /* Antique Gold */
+  --accent-hover: #c49e2b;   /* Antique Gold Hover */
+  --background: #FFFDF9;     /* Cream Warm White */
+  --surface: #FFFFFF;        /* Crisp White */
+  --text-primary: #2E2E2E;   /* Deep Charcoal */
+  --text-secondary: #6B7280; /* Soft Slate Grey */
+  --border: #ece5df;         /* Warm Sand Border */
+  
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --error: #DC2626;
+
+  /* Typography */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Poppins', system-ui, -apple-system, sans-serif;
+
+  /* Spacing Scale */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+
+  /* Border Radii */
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-round: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(139, 69, 19, 0.04);
+  --shadow-md: 0 10px 30px rgba(139, 69, 19, 0.06);
+  --shadow-lg: 0 20px 60px rgba(139, 69, 19, 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+}
+
+/* Global Reset & Box Model */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Base Body Styles */
 body {
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
 }
 
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 2.5rem; /* H1 */
+  margin-bottom: var(--space-24);
+}
+
+h2 {
+  font-size: 2rem; /* H2 */
+  margin-bottom: var(--space-20);
+}
+
+h3 {
+  font-size: 1.5rem; /* H3 */
+  margin-bottom: var(--space-16);
+}
+
+h4 {
+  font-size: 1.25rem; /* H4 */
+  margin-bottom: var(--space-12);
+}
+
+/* Body and Utility Paragraphs */
+p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-16);
+}
+
+.caption {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Link Standard Styling */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* Responsive Image Rules */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Smooth Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: var(--radius-8);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Containers and Main Setup */
 #root {
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+.layout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-24);
 }

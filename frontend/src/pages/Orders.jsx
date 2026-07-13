@@ -24,21 +24,26 @@ function Orders() {
   if (orders.length === 0) {
     return (
       <div className="orders-page">
-        <button
-          className="orders-back-btn"
-          onClick={() => navigate(-1)}
-        >
-          ← Back
-        </button>
-        <div className="orders-empty">
-          <h2>No Orders Yet 📦</h2>
-          <p>Start shopping to see your orders.</p>
-          <Link
-            to="/"
-            className="view-order-btn"
-          >
-            Continue Shopping
-          </Link>
+        <header className="orders-header">
+          <div className="orders-header-content">
+            <div className="orders-header-top">
+              <button className="orders-back-btn-header" onClick={() => navigate(-1)}>
+                ← Back
+              </button>
+              <h1 className="orders-title">My Orders (0)</h1>
+            </div>
+            <p className="orders-subtitle">Track and manage your purchases.</p>
+          </div>
+        </header>
+        <div className="orders-container">
+          <div className="orders-empty">
+            <div className="empty-icon">📦</div>
+            <h2>No Orders Yet</h2>
+            <p>Start shopping to see your orders.</p>
+            <Link to="/" className="continue-shopping-btn">
+              Continue Shopping
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -46,66 +51,85 @@ function Orders() {
 
   return (
     <div className="orders-page">
-      <button
-        className="orders-back-btn"
-        onClick={() => navigate(-1)}
-      >
-        ← Back
-      </button>
-
-      {/* Hero Section */}
-      <section className="orders-hero">
-        <h1>My Orders</h1>
-        <p>Track your handcrafted saree purchases and delivery updates.</p>
-      </section>
-
-      {/* Orders List */}
-      <section className="orders-container">
-        {orders.map((order) => (
-          <div
-            key={order.id}
-            className="order-card"
-          >
-            <div className="order-header">
-              <div>
-                <div className="order-number">Order Number</div>
-                <h2>{order.id}</h2>
-                <p>{order.date}</p>
-              </div>
-              <span
-                className={`order-status ${order.status.toLowerCase()}`}
-              >
-                {order.status}
-              </span>
-            </div>
-
-            <div className="order-details">
-              <div>
-                <strong>Items:</strong> {order.items}
-              </div>
-              <div>
-                <strong>Total:</strong> ₹{order.total}
-              </div>
-            </div>
-
-            <div className="order-actions">
-              <button
-                onClick={() => handleOpenModal(order, "details")}
-                className="view-order-btn-action"
-              >
-                View Details
-              </button>
-
-              <button
-                onClick={() => handleOpenModal(order, "track")}
-                className="track-order-btn"
-              >
-                Track Order
-              </button>
-            </div>
+      <header className="orders-header">
+        <div className="orders-header-content">
+          <div className="orders-header-top">
+            <button className="orders-back-btn-header" onClick={() => navigate(-1)}>
+              ← Back
+            </button>
+            <h1 className="orders-title">My Orders ({orders.length})</h1>
           </div>
-        ))}
-      </section>
+          <p className="orders-subtitle">Track and manage your purchases.</p>
+        </div>
+      </header>
+
+      {/* Orders Container */}
+      <div className="orders-container">
+        <div className="orders-grid">
+          {orders.map((order) => (
+            <div key={order.id} className="order-card">
+              <div className="order-card-header">
+                <div className="order-meta-info">
+                  <span className="order-number-label">Order ID</span>
+                  <h3 className="order-id-value">{order.id}</h3>
+                  <span className="order-date-value">{order.date}</span>
+                </div>
+                <div className="order-status-badges">
+                  <span className={`order-status-badge ${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </span>
+                  {order.paymentStatus && (
+                    <span className={`payment-status-badge ${order.paymentStatus.toLowerCase()}`}>
+                      {order.paymentStatus}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Inline Product Previews */}
+              <div className="order-card-products">
+                {(order.products || []).map((product, idx) => (
+                  <div key={idx} className="card-product-item">
+                    <img
+                      src={product.images?.[0] || product.image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&q=80"}
+                      alt={product.title}
+                      className="card-product-img"
+                    />
+                    <div className="card-product-info">
+                      <h4>{product.title}</h4>
+                      <div className="card-product-pricing">
+                        <span className="card-product-qty">Qty: {product.quantity || 1}</span>
+                        <span className="card-product-price">₹{product.price}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="order-card-footer">
+                <div className="order-card-total">
+                  <span className="total-label">Total Amount</span>
+                  <span className="total-value">₹{order.total}</span>
+                </div>
+                <div className="order-card-actions">
+                  <button
+                    onClick={() => handleOpenModal(order, "details")}
+                    className="view-details-action-btn"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => handleOpenModal(order, "track")}
+                    className="track-order-action-btn"
+                  >
+                    Track Order
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Interactive Modal Overlay */}
       {selectedOrder && (
@@ -151,7 +175,7 @@ function Orders() {
                   )}
 
                   <div className="modal-total-summary">
-                    <p>Status: <span className={`order-status ${selectedOrder.status.toLowerCase()}`}>{selectedOrder.status}</span></p>
+                    <p>Status: <span className={`order-status-badge ${selectedOrder.status.toLowerCase()}`}>{selectedOrder.status}</span></p>
                     <p className="modal-grand-total">Grand Total: <strong>₹{selectedOrder.total}</strong></p>
                   </div>
                 </div>

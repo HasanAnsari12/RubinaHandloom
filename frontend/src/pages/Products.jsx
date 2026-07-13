@@ -131,58 +131,95 @@ function Products({ searchTerm = "" }) {
   return (
     <div className="products-page">
       <div className="container">
-        <h1>All Products</h1>
+        {/* Breadcrumbs */}
+        <nav className="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span className="separator">/</span>
+          <span className="current">Products</span>
+        </nav>
+
+        {/* Page Header */}
+        <header className="products-header">
+          <h1>All Products</h1>
+          <p className="subtitle">
+            Curated heritage masterpieces: elegant Chanderi, Kanjivaram, Banarasi, Cotton and Silk sarees.
+          </p>
+        </header>
 
         {/* Controls */}
         <div className="products-controls">
           {/* Search */}
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={handleSearchChange}
-          />
+          <div
+            className="search-wrapper"
+            data-active={search.trim().length > 0 ? "true" : "false"}
+          >
+            <span className="search-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </span>
+            <input
+              type="text"
+              placeholder="Search sarees by name, type..."
+              value={search}
+              onChange={handleSearchChange}
+            />
+          </div>
 
           {/* Category Filter */}
-          <select
-            value={category}
-            onChange={handleCategoryChange}
+          <div
+            className="select-wrapper"
+            data-active={category !== "all" ? "true" : "false"}
           >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat === "all" ? "All Categories" : cat}
-              </option>
-            ))}
-          </select>
+            <span className="select-label">Category</span>
+            <select
+              value={category}
+              onChange={handleCategoryChange}
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat === "all" ? "All Categories" : cat}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {/* Sort */}
-          <select
-            value={sortBy}
-            onChange={handleSortChange}
+          <div
+            className="select-wrapper"
+            data-active={sortBy !== "default" ? "true" : "false"}
           >
-            <option value="default">Default Sorting</option>
-            <option value="price-low-high">
-              Price: Low to High
-            </option>
-            <option value="price-high-low">
-              Price: High to Low
-            </option>
-            <option value="name-a-z">
-              Name: A to Z
-            </option>
-          </select>
+            <span className="select-label">Sort By</span>
+            <select
+              value={sortBy}
+              onChange={handleSortChange}
+            >
+              <option value="default">Default Sorting</option>
+              <option value="price-low-high">Price: Low to High</option>
+              <option value="price-high-low">Price: High to Low</option>
+              <option value="name-a-z">Name: A to Z</option>
+            </select>
+          </div>
         </div>
 
         {/* No Products */}
         {filteredProducts.length === 0 ? (
-          <p>No products found.</p>
+          <p className="no-products-msg">No products found.</p>
         ) : (
           <>
-            {/* Results Count */}
-            <p>
-              Showing {paginatedProducts.length} of{" "}
-              {filteredProducts.length} products
-            </p>
+            {/* Results Meta Row */}
+            <div className="results-meta">
+              <p className="results-count">
+                <span className="results-count__num">{paginatedProducts.length}</span>
+                {" "}of{" "}
+                <span className="results-count__num">{filteredProducts.length}</span>
+                {" "}products
+              </p>
+              {(search.trim() || category !== "all" || sortBy !== "default") && (
+                <span className="filter-active-badge">Filters Active</span>
+              )}
+            </div>
 
             {/* Product Grid */}
             <div className="products-grid">
