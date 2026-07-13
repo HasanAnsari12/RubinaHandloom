@@ -2,6 +2,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAppContext } from "../context/AppContext";
 import "./Navbar.css";
 
 function Navbar({ searchTerm, setSearchTerm }) {
@@ -10,8 +11,7 @@ function Navbar({ searchTerm, setSearchTerm }) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const savedUser = localStorage.getItem("user");
-  const user = savedUser ? JSON.parse(savedUser) : null;
+  const { user, cartCount, wishlist, logout } = useAppContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,10 +26,17 @@ function Navbar({ searchTerm, setSearchTerm }) {
   }, []);
 
   const handleLogout = () => {
+    // 1. Clear local storage session tokens
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+
+    // 2. Clear application context state
+    logout();
+
+    // 3. Close menus and redirect to login
+    setShowMenu(false);
+    setShowMobileMenu(false);
     navigate("/login");
-    window.location.reload();
   };
 
   return (
@@ -62,9 +69,11 @@ function Navbar({ searchTerm, setSearchTerm }) {
         <div className="mobile-quick-icons">
           <Link to="/wishlist" className="mobile-icon" onClick={() => setShowMobileMenu(false)}>
             ❤️
+            {wishlist.length > 0 && <span className="mobile-badge">{wishlist.length}</span>}
           </Link>
           <Link to="/cart" className="mobile-icon" onClick={() => setShowMobileMenu(false)}>
             🛒
+            {cartCount > 0 && <span className="mobile-badge">{cartCount}</span>}
           </Link>
           <Link to={user ? "/account" : "/login"} className="mobile-icon" onClick={() => setShowMobileMenu(false)}>
             👤
@@ -78,9 +87,11 @@ function Navbar({ searchTerm, setSearchTerm }) {
           </Link>
           <Link to="/wishlist" className="nav-link">
             ❤️ Wishlist
+            {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
           </Link>
           <Link to="/cart" className="nav-link">
             🛒 Cart
+            {cartCount > 0 && <span className="nav-badge">{cartCount}</span>}
           </Link>
           <Link to="/orders" className="nav-link">
             📦 Orders
@@ -98,7 +109,7 @@ function Navbar({ searchTerm, setSearchTerm }) {
                 className="user-btn"
                 onClick={() => setShowMenu(!showMenu)}
               >
-                👤 {user.name.split(" ")[0]}
+                👤 {user.name ? user.name.split(" ")[0] : "User"}
               </button>
 
               {showMenu && (
@@ -111,9 +122,11 @@ function Navbar({ searchTerm, setSearchTerm }) {
                   </Link>
                   <Link to="/wishlist" onClick={() => setShowMenu(false)}>
                     ❤️ Wishlist
+                    {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
                   </Link>
                   <Link to="/cart" onClick={() => setShowMenu(false)}>
                     🛒 Cart
+                    {cartCount > 0 && <span className="nav-badge">{cartCount}</span>}
                   </Link>
                   <button className="logout-btn" onClick={handleLogout}>
                     Logout
@@ -145,9 +158,11 @@ function Navbar({ searchTerm, setSearchTerm }) {
           </Link>
           <Link to="/wishlist" onClick={() => setShowMobileMenu(false)}>
             ❤️ Wishlist
+            {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
           </Link>
           <Link to="/cart" onClick={() => setShowMobileMenu(false)}>
             🛒 Cart
+            {cartCount > 0 && <span className="nav-badge">{cartCount}</span>}
           </Link>
           <Link to="/orders" onClick={() => setShowMobileMenu(false)}>
             📦 Orders

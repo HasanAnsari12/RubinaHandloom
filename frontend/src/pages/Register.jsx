@@ -1,9 +1,15 @@
+// frontend/src/pages/Register.jsx
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { registerUser } from "../services/authService";
+import { useAppContext } from "../context/AppContext";
 import "./Register.css";
+
 function Register() {
   const navigate = useNavigate();
+  const { login } = useAppContext();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -27,36 +33,28 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     setError("");
 
-    if (
-      formData.password !== formData.confirmPassword
-    ) {
+    if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       setLoading(false);
       return;
     }
 
     try {
-      const data = await registerUser(formData);
+      await registerUser(formData);
 
-      localStorage.setItem(
-        "token",
-        data.token
-      );
+      // Show success toast notification
+      toast.success("Account created! Please check your inbox and verify your email before logging in.", {
+        autoClose: 7000
+      });
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
-
-      navigate("/");
+      // Redirect to Login page (preventing auto-login)
+      navigate("/login");
     } catch (err) {
       setError(
-        err.response?.data?.message ||
-          "Registration failed. Please try again."
+        err.response?.data?.message || "Registration failed. Please try again."
       );
     } finally {
       setLoading(false);
@@ -100,6 +98,7 @@ function Register() {
                   value={formData.name}
                   onChange={handleChange}
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -113,6 +112,7 @@ function Register() {
                   value={formData.phone}
                   onChange={handleChange}
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -126,6 +126,7 @@ function Register() {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -140,12 +141,14 @@ function Register() {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    disabled={loading}
                   />
                   <button
                     type="button"
                     className="password-toggle-btn"
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
+                    disabled={loading}
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
@@ -163,12 +166,14 @@ function Register() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
+                    disabled={loading}
                   />
                   <button
                     type="button"
                     className="password-toggle-btn"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    disabled={loading}
                   >
                     {showConfirmPassword ? "Hide" : "Show"}
                   </button>

@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import "./ProductDetails.css";
 import { toast } from "react-toastify";
+import { useAppContext } from "../context/AppContext";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -16,6 +17,8 @@ function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
 
+  const { cart, wishlist, addToCart, addToWishlist, removeFromWishlist } = useAppContext();
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -26,7 +29,7 @@ function ProductDetails() {
 
         // First image ko default selected image banao
         setSelectedImage(
-          fetchedProduct.images?.[0] ||
+          fetchedProduct.images?.[0]?.url ||
             "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80"
         );
       } catch (err) {
@@ -42,9 +45,8 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const alreadyExists = existingCart.find(
+  const handleAddToCart = async () => {
+    const alreadyExists = cart.find(
       (item) => item._id === product._id
     );
 
@@ -53,20 +55,26 @@ function ProductDetails() {
       return;
     }
 
-    existingCart.push({ ...product, quantity });
-    localStorage.setItem("cart", JSON.stringify(existingCart));
-    toast.success("Added to cart!");
+    try {
+      await addToCart(product, quantity);
+      toast.success("Added to cart!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to add to cart.");
+    }
   };
 
-  const handleBuyNow = () => {
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const alreadyExists = existingCart.find(
+  const handleBuyNow = async () => {
+    const alreadyExists = cart.find(
       (item) => item._id === product._id
     );
 
     if (!alreadyExists) {
-      existingCart.push({ ...product, quantity });
-      localStorage.setItem("cart", JSON.stringify(existingCart));
+      try {
+        await addToCart(product, quantity);
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Failed to add to cart.");
+        return;
+      }
     }
     navigate("/checkout");
   };
@@ -96,22 +104,21 @@ function ProductDetails() {
     }
   };
 
-  const handleWishlist = () => {
-    const existingWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    const alreadyExists = existingWishlist.find(
+  const handleWishlist = async () => {
+    const alreadyExists = wishlist.find(
       (item) => item._id === product._id
     );
 
-    if (alreadyExists) {
-      const updatedWishlist = existingWishlist.filter(
-        (item) => item._id !== product._id
-      );
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-      toast.success("Removed from wishlist!");
-    } else {
-      existingWishlist.push(product);
-      localStorage.setItem("wishlist", JSON.stringify(existingWishlist));
-      toast.success("Added to wishlist!");
+    try {
+      if (alreadyExists) {
+        await removeFromWishlist(product._id);
+        toast.success("Removed from wishlist!");
+      } else {
+        await addToWishlist(product);
+        toast.success("Added to wishlist!");
+      }
+    } catch (err) {
+      toast.error("Failed to update wishlist.");
     }
   };
 
@@ -206,10 +213,10 @@ function ProductDetails() {
               {product.images.map((img, index) => (
                 <img
                   key={index}
-                  src={img}
+                  src={img.url}
                   alt={`${product.title} view ${index + 1}`}
-                  className={selectedImage === img ? "pd-thumbnail active" : "pd-thumbnail"}
-                  onClick={() => setSelectedImage(img)}
+                  className={selectedImage === img.url ? "pd-thumbnail active" : "pd-thumbnail"}
+                  onClick={() => setSelectedImage(img.url)}
                 />
               ))}
             </div>

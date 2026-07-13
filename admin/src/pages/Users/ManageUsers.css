@@ -1,0 +1,110 @@
+.manage-users-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.users-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-row {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  transition: box-shadow 0.2s ease;
+}
+
+.user-row:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7b0f1a, #c0392b);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 2px 0;
+}
+
+.user-info p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.user-role {
+  min-width: 80px;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-badge.admin {
+  background: rgba(123, 15, 26, 0.1);
+  color: #7b0f1a;
+}
+
+.role-badge.user {
+  background: #f0f9ff;
+  color: #0284c7;
+}
+
+.user-joined p {
+  font-size: 13px;
+  color: #999;
+  margin: 0;
+}
+
+.delete-user-btn {
+  padding: 8px 18px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-user-btn:hover:not(:disabled) {
+  background: #dc2626;
+  color: #fff;
+}
+
+.delete-user-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

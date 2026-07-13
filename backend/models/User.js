@@ -41,7 +41,12 @@ profileImage: {
       minlength: 6,
     },
     resetToken: String,
-resetTokenExpire: Date,
+    resetTokenExpire: Date,
+    passwordChangedAt: Date,
+
+    emailVerificationToken: String,
+    emailVerificationTokenExpire: Date,
+    lastVerificationEmailSentAt: Date,
 
     isVerified: {
       type: Boolean,

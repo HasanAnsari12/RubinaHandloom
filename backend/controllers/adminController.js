@@ -36,7 +36,7 @@ const getDashboardStats = async (req, res) => {
 
       revenue = orders.reduce(
         (sum, order) =>
-          sum + (order.totalPrice || 0),
+          sum + (order.totalAmount || order.totalPrice || 0),
         0
       );
     }

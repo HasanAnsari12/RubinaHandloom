@@ -1,10 +1,9 @@
 const dotenv = require("dotenv");
+dotenv.config();
+
 const connectDB = require("./config/db");
 const app = require("./app");
 const adminRoutes = require("./routes/adminRoutes");
-
-
-dotenv.config();
 
 // Connect Database
 connectDB();

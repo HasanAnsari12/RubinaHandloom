@@ -1,0 +1,49 @@
+.placeholder-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 80px 40px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.placeholder-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.placeholder-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 12px 0;
+}
+
+.placeholder-card p {
+  font-size: 15px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+.back-link {
+  display: inline-block;
+  padding: 10px 24px;
+  background: #7b0f1a;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.back-link:hover {
+  background: #600b13;
+}
+
+.not-found-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}

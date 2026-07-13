@@ -1,71 +1,54 @@
 // frontend/src/pages/Cart.jsx
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAppContext } from "../context/AppContext";
 import "./Cart.css";
 
 function Cart() {
-  const [cartItems, setCartItems] = useState([]);
-  const navigate = useNavigate();
-
-  // Load cart from localStorage
-  useEffect(() => {
-    const savedCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(savedCart);
-  }, []);
-
-  // Save cart to localStorage
-  const updateCart = (updatedCart) => {
-    setCartItems(updatedCart);
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(updatedCart)
-    );
-  };
+  const { cart, updateQuantity, removeFromCart, cartTotal } = useAppContext();
 
   // Increase quantity
-  const increaseQuantity = (productId) => {
-    const updatedCart = cartItems.map((item) =>
-      item._id === productId
-        ? { ...item, quantity: (item.quantity || 1) + 1 }
-        : item
-    );
-    updateCart(updatedCart);
+  const increaseQuantity = async (productId) => {
+    const item = cart.find((i) => i._id === productId);
+    if (item) {
+      try {
+        await updateQuantity(productId, (item.quantity || 1) + 1);
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Failed to update quantity.");
+      }
+    }
   };
 
   // Decrease quantity
-  const decreaseQuantity = (productId) => {
-    const updatedCart = cartItems.map((item) =>
-      item._id === productId
-        ? { ...item, quantity: Math.max(1, (item.quantity || 1) - 1) }
-        : item
-    );
-    updateCart(updatedCart);
+  const decreaseQuantity = async (productId) => {
+    const item = cart.find((i) => i._id === productId);
+    if (item) {
+      try {
+        await updateQuantity(productId, Math.max(1, (item.quantity || 1) - 1));
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Failed to update quantity.");
+      }
+    }
   };
 
   // Remove item
-  const removeItem = (productId) => {
-    const updatedCart = cartItems.filter(
-      (item) => item._id !== productId
-    );
-    updateCart(updatedCart);
-    toast.error("Item removed from cart.");
+  const removeItem = async (productId) => {
+    try {
+      await removeFromCart(productId);
+      toast.error("Item removed from cart.");
+    } catch (err) {
+      toast.error("Failed to remove item.");
+    }
   };
 
   // Calculations
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * (item.quantity || 1),
-    0
-  );
-  const shipping = subtotal > 0 ? 199 : 0;
-  const grandTotal = subtotal + shipping;
+  const shipping = cartTotal > 0 ? 199 : 0;
+  const grandTotal = cartTotal + shipping;
 
   // Empty cart
-  if (cartItems.length === 0) {
+  if (cart.length === 0) {
     return (
       <div className="cart-page">
-
         {/* Compact Header */}
         <div className="cart-page-header">
           <div className="cart-header__left">
@@ -89,20 +72,18 @@ function Cart() {
             </Link>
           </div>
         </div>
-
       </div>
     );
   }
 
   return (
     <div className="cart-page">
-
       {/* Compact Header */}
       <div className="cart-page-header">
         <div className="cart-header__left">
           <h1 className="cart-header__title">
             Shopping Cart
-            <span className="cart-header__count">{cartItems.length}</span>
+            <span className="cart-header__count">{cart.length}</span>
           </h1>
           <p className="cart-header__sub">
             Review your selected sarees before checkout.
@@ -116,23 +97,20 @@ function Cart() {
       {/* Main Layout: 70% Items / 30% Summary */}
       <div className="cart-body">
         <div className="cart-layout">
-
           {/* Left — Cart Items (70%) */}
           <div className="cart-items">
-
-            {cartItems.map((item) => {
+            {cart.map((item) => {
               const itemTotal = item.price * (item.quantity || 1);
               const isLowStock = item.stock > 0 && item.stock <= 3;
               const isOutOfStock = item.stock === 0;
 
               return (
                 <div key={item._id} className="cart-card">
-
                   {/* Product Image */}
                   <div className="cart-image-wrap">
                     <img
                       src={
-                        item.images?.[0] ||
+                        item.images?.[0]?.url ||
                         item.image ||
                         "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
                       }
@@ -144,7 +122,6 @@ function Cart() {
 
                   {/* Product Info */}
                   <div className="cart-content">
-
                     {/* Category */}
                     {item.category && (
                       <span className="cart-category">{item.category}</span>
@@ -196,7 +173,6 @@ function Cart() {
                         Remove
                       </button>
                     </div>
-
                   </div>
                 </div>
               );
@@ -209,8 +185,8 @@ function Cart() {
 
             <div className="summary-rows">
               <div className="summary-row">
-                <span>Subtotal ({cartItems.length} item{cartItems.length > 1 ? "s" : ""})</span>
-                <span>₹{subtotal.toLocaleString("en-IN")}</span>
+                <span>Subtotal ({cart.length} item{cart.length > 1 ? "s" : ""})</span>
+                <span>₹{cartTotal.toLocaleString("en-IN")}</span>
               </div>
               <div className="summary-row">
                 <span>Shipping</span>
@@ -237,10 +213,8 @@ function Cart() {
               Continue Shopping
             </Link>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 }

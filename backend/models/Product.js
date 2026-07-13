@@ -31,11 +31,26 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    images: [
-      {
-        type: String,
+    images: {
+      type: [
+        {
+          url: {
+            type: String,
+            required: true,
+          },
+          public_id: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      validate: {
+        validator: function (v) {
+          return v && v.length >= 1 && v.length <= 5;
+        },
+        message: "Product must have between 1 and 5 images.",
       },
-    ],
+    },
     rating: {
       type: Number,
       default: 0,

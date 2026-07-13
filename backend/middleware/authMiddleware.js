@@ -33,6 +33,17 @@ const protect = async (req, res, next) => {
       });
     }
 
+    // Invalidate token if password was changed after token issue date
+    if (req.user.passwordChangedAt) {
+      const changedTimestamp = Math.floor(req.user.passwordChangedAt.getTime() / 1000);
+      if (decoded.iat < changedTimestamp) {
+        return res.status(401).json({
+          success: false,
+          message: "Password recently changed. Please log in again.",
+        });
+      }
+    }
+
     next();
   } catch (error) {
     res.status(401).json({

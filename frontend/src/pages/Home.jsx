@@ -238,7 +238,7 @@ const priceRanges = [
           <div className="card-image-wrapper" style={{ position: "relative" }}>
             <img
               src={
-                product.images?.[0] ||
+                product.images?.[0]?.url ||
                 "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
               }
               alt={product.title}

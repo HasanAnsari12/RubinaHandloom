@@ -1,0 +1,28 @@
+.admin-layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f7f8;
+}
+
+.admin-layout-main {
+  flex: 1;
+  margin-left: 260px; /* Width of the sidebar */
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevents flex items from breaking grid widths */
+}
+
+.admin-page-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .admin-layout-main {
+    margin-left: 0;
+  }
+  .admin-sidebar {
+    display: none; /* Hide sidebar on mobile in migration phase */
+  }
+}

@@ -259,6 +259,61 @@
   margin-bottom: var(--space-20);
 }
 
+/* Social Login Styles */
+.social-login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: var(--space-20) 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.social-login-divider::before,
+.social-login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.social-login-divider:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.social-login-divider:not(:empty)::after {
+  margin-left: .5em;
+}
+
+.google-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-12);
+  width: 100%;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-8);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  margin-bottom: var(--space-20);
+}
+
+.google-login-btn:hover {
+  background: #f9f9f9;
+  border-color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.google-icon-svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* Responsive Rules */
 @media (max-width: 992px) {
   .login-page {
@@ -309,4 +364,49 @@
     height: auto;
     padding: var(--space-12) var(--space-8);
   }
+}
+
+/* Custom Verification Resend Styles */
+.login-error-container {
+  background: rgba(220, 38, 38, 0.05);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--radius-8);
+  padding: var(--space-12);
+  text-align: center;
+  margin-bottom: var(--space-20);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-error-container .login-error {
+  margin-bottom: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--error);
+  font-size: 14px;
+}
+
+.login-resend-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color var(--transition-fast);
+}
+
+.login-resend-btn:hover {
+  color: var(--primary-hover);
+}
+
+.login-resend-btn:disabled {
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: not-allowed;
 }

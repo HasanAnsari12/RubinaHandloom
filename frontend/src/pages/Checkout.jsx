@@ -2,21 +2,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAppContext } from "../context/AppContext";
+import { placeOrder as apiPlaceOrder } from "../services/orderService";
 import "./Checkout.css";
 
 function Checkout() {
   const navigate = useNavigate();
+  const { cart, clearCart } = useAppContext();
 
-  const [cartItems, setCartItems] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const savedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
-
-    setCartItems(cart);
     setAddresses(savedAddresses);
 
     // Auto-select first address if available
@@ -25,7 +24,7 @@ function Checkout() {
     }
   }, []);
 
-  const subtotal = cartItems.reduce(
+  const subtotal = cart.reduce(
     (total, item) => total + item.price * (item.quantity || 1),
     0
   );
@@ -33,8 +32,8 @@ function Checkout() {
   const shipping = subtotal > 0 ? 199 : 0;
   const total = subtotal + shipping;
 
-  const handlePlaceOrder = () => {
-    if (cartItems.length === 0) {
+  const handlePlaceOrder = async () => {
+    if (cart.length === 0) {
       toast.error("Your cart is empty.");
       return;
     }
@@ -45,31 +44,41 @@ function Checkout() {
     }
 
     setIsProcessingPayment(true);
-    toast.info("Connecting to payment gateway...");
+    toast.info("Processing your order...");
 
-    // Mock payment processing delay (1.5 seconds)
-    setTimeout(() => {
-      const orders = JSON.parse(localStorage.getItem("orders")) || [];
-      const deliveryAddress = addresses[selectedAddress];
+    const deliveryAddress = addresses[selectedAddress];
 
-      const newOrder = {
-        id: "ORD-" + Date.now(),
-        date: new Date().toLocaleDateString(),
-        status: "Processing",
-        total: total,
-        items: cartItems.reduce((acc, curr) => acc + (curr.quantity || 1), 0),
-        products: cartItems,
-        address: deliveryAddress,
-      };
+    // Build the request body for the backend placeOrder route
+    const orderData = {
+      shippingAddress: {
+        fullName: deliveryAddress.fullName || deliveryAddress.name,
+        phone: deliveryAddress.phone,
+        house: deliveryAddress.house || deliveryAddress.flat || deliveryAddress.addressLine1,
+        area: deliveryAddress.area || deliveryAddress.street || deliveryAddress.addressLine2,
+        city: deliveryAddress.city,
+        state: deliveryAddress.state,
+        pincode: deliveryAddress.pincode || deliveryAddress.zipCode,
+      },
+      paymentMethod: "COD", // Defaulting to Cash on Delivery for test connection
+    };
 
-      orders.unshift(newOrder);
-      localStorage.setItem("orders", JSON.stringify(orders));
-      localStorage.removeItem("cart");
-
-      toast.success("Payment Successful! Order placed. 🎉");
+    try {
+      const response = await apiPlaceOrder(orderData);
+      
+      if (response.success) {
+        // Clear local and database cart state
+        await clearCart();
+        toast.success("Order placed successfully! 🎉");
+        navigate("/order-success", { state: { orderId: response.order._id || response.order.id } });
+      } else {
+        toast.error(response.message || "Failed to place order.");
+      }
+    } catch (err) {
+      console.error("Failed to submit order:", err);
+      toast.error(err.response?.data?.message || "Payment or stock verification failed.");
+    } finally {
       setIsProcessingPayment(false);
-      navigate("/order-success", { state: { orderId: newOrder.id } });
-    }, 1500);
+    }
   };
 
   return (

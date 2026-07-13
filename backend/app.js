@@ -10,6 +10,8 @@ const cartRoutes = require("./routes/cartRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const { notFound } = require("./middleware/notFoundMiddleware");
 const { errorHandler } = require("./middleware/errorMiddleware");
@@ -38,9 +40,13 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Error Handling Middleware
 app.use(notFound);
 app.use(errorHandler);
+
+// Trigger nodemon reload with drz7rdsri
 
 module.exports = app;

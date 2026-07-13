@@ -15,14 +15,6 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import Orders from "./pages/Orders";
 import Wishlist from "./pages/Wishlist";
-
-import AdminDashboard from "./pages/AdminDashboard";
-import AddProduct from "./pages/AddProduct";
-import AdminProducts from "./pages/AdminProducts";
-import EditProduct from "./pages/EditProduct";
-import AdminOrders from "./pages/AdminOrders";
-import AdminUsers from "./pages/AdminUsers";
-import CSVUpload from "./pages/CSVUpload";
 import ForgotPassword from "./pages/ForgotPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,6 +23,7 @@ import Account from "./pages/Account";
 import EditProfile from "./pages/EditProfile";
 import AddressPage from "./pages/AddressPage";
 import ChangePassword from "./pages/ChangePassword";
+
 function AppContent() {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
@@ -39,9 +32,7 @@ function AppContent() {
     location.pathname === "/login" ||
     location.pathname === "/register";
 
-  const hideFooter =
-    hideNavbar ||
-    location.pathname.startsWith("/admin");
+  const hideFooter = hideNavbar;
 
   return (
     <>
@@ -75,77 +66,19 @@ function AppContent() {
 
         {/* Cart & Orders */}
         <Route path="/cart" element={<Cart />} />
-        <Route
-  path="/checkout"
-  element={<Checkout />}
-/>
-        <Route
-          path="/order-success"
-          element={<OrderSuccess />}
-        />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/wishlist" element={<Wishlist />} />
 
-        {/* Admin */}
-        <Route
-          path="/admin"
-          element={<AdminDashboard />}
-        />
+        {/* Account */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/account/edit" element={<EditProfile />} />
+        <Route path="/account/address" element={<AddressPage />} />
+        <Route path="/account/password" element={<ChangePassword />} />
 
-        <Route
-          path="/admin/add-product"
-          element={<AddProduct />}
-        />
-
-        <Route
-          path="/admin/products"
-          element={<AdminProducts />}
-        />
-
-        <Route
-          path="/admin/edit-product/:id"
-          element={<EditProduct />}
-        />
-
-        <Route
-          path="/admin/orders"
-          element={<AdminOrders />}
-        />
-
-        <Route
-          path="/admin/users"
-          element={<AdminUsers />}
-        />
-
-        <Route
-          path="/admin/upload-csv"
-          element={<CSVUpload />}
-        />
-        <Route
-  path="/forgot-password"
-  element={<ForgotPassword />}
-/>
-
-<Route
-  path="/reset-password"
-  element={<ResetPassword />}
-/>
-<Route
-  path="/account"
-  element={<Account />}
-/>
-<Route
-  path="/account/edit"
-  element={<EditProfile />}
-/>
-<Route
-  path="/account/address"
-  element={<AddressPage />}
-/>
-<Route
-  path="/account/password"
-  element={<ChangePassword />}
-/>
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>

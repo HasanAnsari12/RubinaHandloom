@@ -174,9 +174,64 @@ const validateChangePassword = (req, res, next) => {
   next();
 };
 
+// @desc    Validate reset password data
+const validateResetPassword = (req, res, next) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({
+      success: false,
+      message: "Password is required",
+    });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).json({
+      success: false,
+      message: "Password must be at least 8 characters long",
+    });
+  }
+
+  const uppercaseRegex = /[A-Z]/;
+  const lowercaseRegex = /[a-z]/;
+  const numberRegex = /[0-9]/;
+  const specialCharRegex = /[^A-Za-z0-9]/;
+
+  if (!uppercaseRegex.test(password)) {
+    return res.status(400).json({
+      success: false,
+      message: "Password must contain at least one uppercase letter",
+    });
+  }
+
+  if (!lowercaseRegex.test(password)) {
+    return res.status(400).json({
+      success: false,
+      message: "Password must contain at least one lowercase letter",
+    });
+  }
+
+  if (!numberRegex.test(password)) {
+    return res.status(400).json({
+      success: false,
+      message: "Password must contain at least one number",
+    });
+  }
+
+  if (!specialCharRegex.test(password)) {
+    return res.status(400).json({
+      success: false,
+      message: "Password must contain at least one special character",
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   validateRegister,
   validateLogin,
   validateForgotPassword,
   validateChangePassword,
+  validateResetPassword,
 };

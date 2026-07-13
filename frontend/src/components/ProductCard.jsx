@@ -14,7 +14,7 @@ function ProductCard({ product }) {
       {/* ── Image Zone ── */}
       <div className="product-card__image-wrap">
         <img
-          src={product.images?.[0] || product.image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"}
+          src={product.images?.[0]?.url || product.image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"}
           alt={product.title}
           loading="lazy"
         />

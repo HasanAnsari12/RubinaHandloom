@@ -1,43 +1,28 @@
 // frontend/src/pages/Wishlist.jsx
 
-import { useEffect, useState } from "react";
-import "./Wishlist.css";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAppContext } from "../context/AppContext";
+import "./Wishlist.css";
 
 function Wishlist() {
-  const [wishlistItems, setWishlistItems] = useState([]);
   const navigate = useNavigate();
-
-  // Load wishlist from localStorage
-  useEffect(() => {
-    const savedWishlist =
-      JSON.parse(localStorage.getItem("wishlist")) || [];
-    setWishlistItems(savedWishlist);
-  }, []);
+  const { wishlist, removeFromWishlist } = useAppContext();
 
   // Remove product from wishlist
-  const handleRemove = (productId) => {
-    const updatedWishlist = wishlistItems.filter(
-      (item) => item._id !== productId
-    );
-
-    // Update localStorage
-    localStorage.setItem(
-      "wishlist",
-      JSON.stringify(updatedWishlist)
-    );
-
-    // Update state
-    setWishlistItems(updatedWishlist);
-
-    alert("Removed from wishlist!");
+  const handleRemove = async (productId) => {
+    try {
+      await removeFromWishlist(productId);
+      toast.success("Removed from wishlist!");
+    } catch (err) {
+      toast.error("Failed to remove item.");
+    }
   };
 
   // Empty Wishlist UI
-  if (wishlistItems.length === 0) {
+  if (wishlist.length === 0) {
     return (
       <div className="wishlist-page">
-
         {/* Compact Page Header */}
         <div className="wishlist-page-header">
           <div className="wishlist-header__left">
@@ -61,21 +46,19 @@ function Wishlist() {
             </Link>
           </div>
         </div>
-
       </div>
     );
   }
 
   return (
     <div className="wishlist-page">
-
       {/* Compact Page Header */}
       <div className="wishlist-page-header">
         <div className="wishlist-header__left">
           <h1 className="wishlist-header__title">
             My Wishlist
             <span className="wishlist-header__count">
-              {wishlistItems.length}
+              {wishlist.length}
             </span>
           </h1>
           <p className="wishlist-header__sub">
@@ -90,19 +73,18 @@ function Wishlist() {
       {/* Wishlist Grid */}
       <div className="wishlist-container">
         <div className="wishlist-grid">
-          {wishlistItems.map((item) => {
+          {wishlist.map((item) => {
             const isOutOfStock = item.stock === 0;
             const isLowStock = item.stock > 0 && item.stock <= 3;
             const hasDiscount = item.discountPrice > 0;
 
             return (
               <div key={item._id} className="wishlist-card">
-
                 {/* Image */}
                 <div className="wishlist-image-wrap">
                   <img
                     src={
-                      item.images?.[0] ||
+                      item.images?.[0]?.url ||
                       item.image ||
                       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
                     }
@@ -120,7 +102,6 @@ function Wishlist() {
 
                 {/* Content */}
                 <div className="wishlist-content">
-
                   {/* Category */}
                   {item.category && (
                     <span className="wishlist-category">{item.category}</span>
@@ -169,7 +150,6 @@ function Wishlist() {
                       Remove
                     </button>
                   </div>
-
                 </div>
               </div>
             );
