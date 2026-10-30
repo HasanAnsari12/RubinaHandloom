@@ -1,10 +1,17 @@
 const express = require("express");
 const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 const { protect } = require("../middleware/authMiddleware");
 const { admin } = require("../middleware/adminMiddleware");
 const { uploadBuffer, deleteImage } = require("../services/cloudinaryService");
 
 const router = express.Router();
+
+const uploadsDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 // 1. Configure Multer Memory Storage
 const storage = multer.memoryStorage();
@@ -104,15 +111,49 @@ router.post(
         }
       }
 
-      // Upload all image buffers in parallel
-      const uploadPromises = req.files.map((file) => uploadBuffer(file.buffer));
-      const uploadResults = await Promise.all(uploadPromises);
+      let images = [];
 
-      // Map response to retrieve secure URL and public ID
-      const images = uploadResults.map((result) => ({
-        url: result.secure_url,
-        public_id: result.public_id,
-      }));
+      // Attempt Cloudinary upload first
+      try {
+        const uploadPromises = req.files.map((file) => uploadBuffer(file.buffer));
+        const uploadResults = await Promise.all(uploadPromises);
+
+        images = uploadResults.map((result) => ({
+          url: result.secure_url,
+          public_id: result.public_id,
+        }));
+      } catch (cloudinaryErr) {
+        // Sanitize error message on server side without leaking API secrets or credentials
+        console.error("Cloudinary upload failed:", cloudinaryErr.message);
+
+        // Production safeguard: Disallow silent fallback to ephemeral disk storage in production
+        if (process.env.NODE_ENV === "production") {
+          return res.status(500).json({
+            success: false,
+            message: "Cloud image storage service is currently unavailable. Please try again later.",
+          });
+        }
+
+        console.warn(
+          "Development mode: Falling back to local disk storage for image upload."
+        );
+
+        // Development fallback: save files locally to backend/uploads
+        const backendBaseUrl = process.env.BACKEND_URL || "http://localhost:5000";
+
+        for (const file of req.files) {
+          const ext = path.extname(file.originalname) || ".jpg";
+          const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+          const filePath = path.join(uploadsDir, uniqueName);
+
+          await fs.promises.writeFile(filePath, file.buffer);
+
+          images.push({
+            url: `${backendBaseUrl}/uploads/${uniqueName}`,
+            public_id: `local_${uniqueName}`,
+          });
+        }
+      }
 
       res.status(200).json({
         success: true,
@@ -120,16 +161,16 @@ router.post(
         images,
       });
     } catch (error) {
-      console.error("Cloudinary upload failure:", error.message);
+      console.error("Image upload failure:", error.message);
       res.status(500).json({
         success: false,
-        message: `Cloudinary upload failed: ${error.message}`,
+        message: `Image upload failed: ${error.message}`,
       });
     }
   }
 );
 
-// @desc    Delete product image from Cloudinary
+// @desc    Delete product image from Cloudinary or local storage
 // @route   POST /api/upload/delete
 // @access  Private/Admin
 router.post("/delete", protect, admin, async (req, res) => {
@@ -140,6 +181,28 @@ router.post("/delete", protect, admin, async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Please provide the public_id of the image to delete.",
+      });
+    }
+
+    // Handle local image deletion
+    if (public_id.startsWith("local_")) {
+      const filename = public_id.replace(/^local_/, "");
+      const filePath = path.join(uploadsDir, filename);
+
+      if (fs.existsSync(filePath)) {
+        await fs.promises.unlink(filePath);
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Local image deleted successfully.",
+      });
+    }
+
+    if (public_id === "legacy" || public_id === "default" || public_id === "csv_import") {
+      return res.status(200).json({
+        success: true,
+        message: "Image reference removed.",
       });
     }
 
@@ -157,10 +220,10 @@ router.post("/delete", protect, admin, async (req, res) => {
       message: "Image deleted successfully from Cloudinary.",
     });
   } catch (error) {
-    console.error("Cloudinary delete failure:", error.message);
+    console.error("Image delete failure:", error.message);
     res.status(500).json({
       success: false,
-      message: `Cloudinary image deletion failed: ${error.message}`,
+      message: `Image deletion failed: ${error.message}`,
     });
   }
 });

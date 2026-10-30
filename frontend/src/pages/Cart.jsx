@@ -36,13 +36,13 @@ function Cart() {
     try {
       await removeFromCart(productId);
       toast.error("Item removed from cart.");
-    } catch (err) {
+    } catch {
       toast.error("Failed to remove item.");
     }
   };
 
   // Calculations
-  const shipping = cartTotal > 0 ? 199 : 0;
+  const shipping = 0;
   const grandTotal = cartTotal + shipping;
 
   // Empty cart
@@ -110,13 +110,19 @@ function Cart() {
                   <div className="cart-image-wrap">
                     <img
                       src={
-                        item.images?.[0]?.url ||
+                        (typeof item.images?.[0] === "string" ? item.images[0] : item.images?.[0]?.url) ||
                         item.image ||
-                        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
+                        "/images/saree1.jpg"
                       }
                       alt={item.title}
                       className="cart-image"
                       loading="lazy"
+                      onError={(e) => {
+                        if (e.currentTarget.getAttribute("data-fallback") !== "true") {
+                          e.currentTarget.setAttribute("data-fallback", "true");
+                          e.currentTarget.src = "/images/saree1.jpg";
+                        }
+                      }}
                     />
                   </div>
 

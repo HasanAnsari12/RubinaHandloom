@@ -1,0 +1,128 @@
+.dashboard-hero-banner {
+  background: linear-gradient(135deg, var(--primary) 0%, #4E0E21 100%);
+  border-radius: var(--border-radius-lg);
+  padding: 36px 40px;
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  margin-bottom: 30px;
+}
+
+/* Background graphics for luxury branding look */
+.dashboard-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 320px;
+  height: 320px;
+  background-color: var(--accent);
+  opacity: 0.05;
+  border-radius: 50%;
+  border: 4px solid var(--accent);
+  pointer-events: none;
+}
+
+.hero-banner-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-welcome-text {
+  max-width: 60%;
+}
+
+.hero-date-badge {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.hero-heading {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+}
+
+.hero-heading span {
+  color: var(--accent);
+}
+
+.hero-description {
+  font-size: 13px;
+  color: #F3ECE8;
+  line-height: 1.5;
+}
+
+/* Established badge */
+.hero-vintage-badge {
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  padding: 12px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: rgba(123, 30, 58, 0.6);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.vintage-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.vintage-txt {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent-light);
+  letter-spacing: 1.5px;
+}
+
+.vintage-yr {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .dashboard-hero-banner {
+    padding: 24px 28px;
+  }
+  .hero-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-welcome-text {
+    max-width: 100%;
+  }
+  .hero-heading {
+    font-size: 24px;
+  }
+  .hero-vintage-badge {
+    display: none;
+  }
+}

@@ -23,13 +23,13 @@ const orderItemSchema = new mongoose.Schema(
 
 const shippingAddressSchema = new mongoose.Schema(
   {
-    fullName: { type: String, required: true, trim: true },
-    phone: { type: String, required: true, trim: true },
-    house: { type: String, required: true, trim: true },
-    area: { type: String, required: true, trim: true },
-    city: { type: String, required: true, trim: true },
-    state: { type: String, required: true, trim: true },
-    pincode: { type: String, required: true, trim: true },
+    fullName: { type: String, required: true, trim: true, default: "Customer" },
+    phone: { type: String, required: true, trim: true, default: "0000000000" },
+    house: { type: String, required: true, trim: true, default: "Pending delivery details" },
+    area: { type: String, required: true, trim: true, default: "Pending delivery details" },
+    city: { type: String, required: true, trim: true, default: "Pending" },
+    state: { type: String, required: true, trim: true, default: "Pending" },
+    pincode: { type: String, required: true, trim: true, default: "000000" },
   },
   { _id: false }
 );
@@ -45,6 +45,15 @@ const orderSchema = new mongoose.Schema(
     shippingAddress: {
       type: shippingAddressSchema,
       required: true,
+      default: () => ({
+        fullName: "Customer",
+        phone: "0000000000",
+        house: "Pending delivery details",
+        area: "Pending delivery details",
+        city: "Pending",
+        state: "Pending",
+        pincode: "000000",
+      }),
     },
     paymentMethod: {
       type: String,
@@ -91,11 +100,32 @@ const orderSchema = new mongoose.Schema(
       ref: "Coupon",
       default: null,
     },
+    isStockDecremented: {
+      type: Boolean,
+      default: false,
+    },
+    finalizationLock: {
+      type: Date,
+      default: null,
+    },
+    lockToken: {
+      type: String,
+      default: null,
+    },
+    reviewRequired: {
+      type: Boolean,
+      default: false,
+    },
+    reconciliationReason: {
+      type: String,
+      default: null,
+    },
     paymentResult: {
       id: { type: String },
       status: { type: String },
       update_time: { type: String },
       email_address: { type: String },
+      razorpayOrderId: { type: String },
     },
   },
   {

@@ -1,0 +1,583 @@
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.coupon-details-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  background-color: var(--card-bg);
+  border-left: var(--border-medium);
+  box-shadow: var(--shadow-lg);
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 520px;
+}
+
+.drawer-header {
+  padding: 20px 28px;
+  border-bottom: var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--card-bg);
+}
+
+.drawer-header-left h3 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.drawer-coupon-code {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+  margin-top: 4px;
+  background-color: var(--primary-glow);
+  padding: 2px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.drawer-close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-close-btn:hover {
+  background-color: var(--bg-main);
+  color: var(--primary);
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  background-color: var(--card-bg);
+}
+
+.drawer-loading-padding {
+  padding: 28px;
+}
+
+.drawer-content-flow {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-section {
+  padding: 24px 28px;
+  border-bottom: var(--border-light);
+}
+
+.drawer-section-title {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+/* Status block layout */
+.status-summary-pnl {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  background-color: var(--bg-main);
+}
+
+.status-grid-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.status-grid-item span {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Overview card details */
+.campaign-overview-pnl {
+  text-align: left;
+}
+
+.campaign-overview-card {
+  background-color: var(--card-bg);
+  border: var(--border-light);
+  border-radius: var(--border-radius-sm);
+  padding: 16px 20px;
+}
+
+.campaign-title-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.campaign-desc-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Scope & Eligibility details */
+.scope-eligibility-pnl {
+  text-align: left;
+}
+
+.scope-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.scope-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scope-meta-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.scope-meta-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  background-color: var(--bg-main);
+  border: var(--border-light);
+  padding: 6px 12px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.scope-meta-value-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Discount configurations layout box */
+.discount-details-pnl {
+  text-align: left;
+}
+
+.discount-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.discount-kpi-box {
+  background-color: var(--bg-main);
+  border: var(--border-light);
+  border-radius: 6px;
+  padding: 12px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.discount-kpi-box span {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.discount-kpi-box strong {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.discount-kpi-box strong.primary-color-text {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Usage Progress fractions */
+.usage-redemptions-pnl {
+  text-align: left;
+}
+
+.unlimited-uses-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-main);
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: var(--border-light);
+}
+
+.unlimited-badge-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  background-color: var(--primary-glow);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.unlimited-uses-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.progress-fraction-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-header-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.progress-bar-track {
+  height: 8px;
+  background-color: var(--bg-main);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+}
+
+.progress-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.nearly-exhausted-alert-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--danger);
+  background-color: var(--danger-glow);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Validity countdown schedules */
+.validity-schedule-pnl {
+  text-align: left;
+}
+
+.validity-countdown-card-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.countdown-status-indicator-tag {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 6px;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.countdown-status-indicator-tag.expiry-green {
+  background-color: var(--success-glow);
+  color: var(--success);
+}
+
+.countdown-status-indicator-tag.expiry-orange {
+  background-color: var(--warning-glow);
+  color: var(--warning);
+}
+
+.countdown-status-indicator-tag.expiry-red {
+  background-color: var(--danger-glow);
+  color: var(--danger);
+  animation: pulse 2s infinite;
+}
+
+.countdown-status-indicator-tag.expiry-gray {
+  background-color: var(--bg-main);
+  color: var(--text-secondary);
+}
+
+.validity-dates-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.date-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-block span {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.date-block strong {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* Visual Timeline progresses */
+.visual-timeline-pnl {
+  text-align: left;
+}
+
+.timeline-steps-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  flex: 1;
+}
+
+.step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  background-color: var(--bg-main);
+  color: var(--text-muted);
+  border: 2px solid var(--border-medium);
+  transition: all 0.3s ease;
+}
+
+.timeline-step span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.step-line-bar {
+  flex: 1;
+  height: 2px;
+  background-color: var(--border-medium);
+  margin-bottom: 20px; /* aligns with step circles */
+}
+
+/* Step States */
+.timeline-step.completed .step-circle {
+  background-color: var(--primary-glow);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.timeline-step.completed span {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.timeline-step.active .step-circle {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  transform: scale(1.15);
+  box-shadow: 0 4px 10px var(--primary-glow);
+}
+
+.timeline-step.active span {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.timeline-step.muted {
+  opacity: 0.5;
+}
+
+/* Claim History Placeholder lists */
+.usage-history-pnl {
+  text-align: left;
+}
+
+.usage-history-placeholder-card {
+  background-color: var(--bg-main);
+  border: 1px dashed var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  padding: 16px 20px;
+}
+
+.usage-history-placeholder-card h5 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.usage-history-coming-soon-banner span {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+}
+
+.usage-history-coming-soon-banner p {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Redemptions Mini Analytics widgets */
+.analytics-placeholder-pnl {
+  text-align: left;
+}
+
+.analytics-mini-widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.analytics-mini-box {
+  background-color: var(--bg-main);
+  border: var(--border-light);
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+}
+
+.analytics-mini-box span {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.analytics-mini-box strong {
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+/* Audit Logs date structures */
+.audit-dates-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.date-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-secondary);
+}
+
+.date-row span:last-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Database Object IDs footer blocks */
+.drawer-footer-raw-info {
+  padding: 16px 28px 24px 28px;
+  text-align: left;
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--card-bg);
+  border-top: var(--border-light);
+}
+
+.drawer-footer-raw-info code {
+  font-family: monospace;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); box-shadow: 0 0 8px rgba(220, 38, 38, 0.2); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 991px) {
+  .coupon-details-drawer {
+    width: 80%;
+  }
+}
+
+@media (max-width: 576px) {
+  .coupon-details-drawer {
+    width: 100%;
+  }
+  .scope-details-grid {
+    grid-template-columns: 1fr;
+  }
+  .discount-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .analytics-mini-widgets-grid {
+    grid-template-columns: 1fr;
+  }
+}

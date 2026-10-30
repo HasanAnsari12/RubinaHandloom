@@ -3,8 +3,9 @@ const Review = require("../models/Review");
 const Product = require("../models/Product");
 
 // Helper to recalculate and update product average rating & review count in DB
+// Recalculates metrics immediately using only Approved and non-deleted reviews.
 const updateProductRatingMetrics = async (productId) => {
-  const reviews = await Review.find({ product: productId });
+  const reviews = await Review.find({ product: productId, status: "Approved", isDeleted: { $ne: true } });
   const numReviews = reviews.length;
   const rating = numReviews > 0
     ? Number((reviews.reduce((sum, item) => sum + item.rating, 0) / numReviews).toFixed(1))
@@ -13,7 +14,7 @@ const updateProductRatingMetrics = async (productId) => {
   await Product.findByIdAndUpdate(productId, { rating, numReviews });
 };
 
-// @desc    Get reviews for a product
+// @desc    Get reviews for a product (Customer-facing, Approved only)
 // @route   GET /api/reviews/product/:productId
 // @access  Public
 const getProductReviews = async (req, res) => {
@@ -27,7 +28,11 @@ const getProductReviews = async (req, res) => {
       });
     }
 
-    const reviews = await Review.find({ product: productId })
+    const reviews = await Review.find({
+      product: productId,
+      status: "Approved",
+      isDeleted: { $ne: true },
+    })
       .populate("user", "name profileImage")
       .sort({ createdAt: -1 });
 
@@ -44,7 +49,7 @@ const getProductReviews = async (req, res) => {
   }
 };
 
-// @desc    Add a review for a product
+// @desc    Add a review for a product (Default status: Pending)
 // @route   POST /api/reviews
 // @access  Private
 const addReview = async (req, res) => {
@@ -84,14 +89,15 @@ const addReview = async (req, res) => {
       });
     }
 
-    // 4. Validate that one user can review one product only
+    // 4. Validate that one user can review one product only (Reject with 409 Conflict)
     const existingReview = await Review.findOne({
       user: req.user._id,
       product: productId,
+      isDeleted: { $ne: true },
     });
 
     if (existingReview) {
-      return res.status(400).json({
+      return res.status(409).json({
         success: false,
         message: "You have already reviewed this product",
       });
@@ -102,14 +108,15 @@ const addReview = async (req, res) => {
       product: productId,
       rating: ratingNum,
       comment: comment.trim(),
+      status: "Pending", // Default is Pending until moderated
     });
 
-    // Recalculate and update product aggregate rating metric values
+    // Note: Pending review doesn't alter rating metrics yet since we only aggregate Approved reviews
     await updateProductRatingMetrics(productId);
 
     res.status(201).json({
       success: true,
-      message: "Review added successfully",
+      message: "Review added successfully and is pending approval",
       review,
     });
   } catch (error) {
@@ -120,7 +127,7 @@ const addReview = async (req, res) => {
   }
 };
 
-// @desc    Update a review
+// @desc    Update a review (Self owner only, Immutable comment check)
 // @route   PUT /api/reviews/:id
 // @access  Private
 const updateReview = async (req, res) => {
@@ -128,7 +135,6 @@ const updateReview = async (req, res) => {
     const { id } = req.params;
     const { rating, comment } = req.body;
 
-    // 1. Validate MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
@@ -136,16 +142,15 @@ const updateReview = async (req, res) => {
       });
     }
 
-    // 2. Validate Review existence
     const review = await Review.findById(id);
-    if (!review) {
+    if (!review || review.isDeleted) {
       return res.status(404).json({
         success: false,
         message: "Review not found",
       });
     }
 
-    // 3. Ensure only review owner can update
+    // Ensure only review owner can update
     if (review.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
@@ -153,7 +158,6 @@ const updateReview = async (req, res) => {
       });
     }
 
-    // 4. Validate rating boundary if provided
     if (rating !== undefined) {
       const ratingNum = Number(rating);
       if (isNaN(ratingNum) || ratingNum < 1 || ratingNum > 5) {
@@ -165,13 +169,14 @@ const updateReview = async (req, res) => {
       review.rating = ratingNum;
     }
 
+    // Customer can edit comment, but admin edits are blocked by policy
     if (comment !== undefined) {
       review.comment = comment.trim();
     }
 
     await review.save();
 
-    // Recalculate average rating & review count in Product DB model
+    // Recalculate rating metrics
     await updateProductRatingMetrics(review.product);
 
     res.status(200).json({
@@ -187,14 +192,13 @@ const updateReview = async (req, res) => {
   }
 };
 
-// @desc    Delete a review
+// @desc    Delete a review (Soft Delete support, owner or admin)
 // @route   DELETE /api/reviews/:id
 // @access  Private
 const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // 1. Validate MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
@@ -202,17 +206,16 @@ const deleteReview = async (req, res) => {
       });
     }
 
-    // 2. Validate Review existence
     const review = await Review.findById(id);
-    if (!review) {
+    if (!review || review.isDeleted) {
       return res.status(404).json({
         success: false,
         message: "Review not found",
       });
     }
 
-    // 3. Ensure only review owner can delete
-    if (review.user.toString() !== req.user._id.toString()) {
+    // Ensure review owner OR admin can delete
+    if (review.user.toString() !== req.user._id.toString() && req.user.role !== "admin") {
       return res.status(403).json({
         success: false,
         message: "Not authorized to delete this review",
@@ -220,14 +223,99 @@ const deleteReview = async (req, res) => {
     }
 
     const productId = review.product;
-    await review.deleteOne();
 
-    // Recalculate average rating & review count in Product DB model
+    // Perform soft delete
+    review.isDeleted = true;
+    review.deletedAt = new Date();
+    await review.save();
+
+    // Recalculate metrics immediately inside request lifecycle before success response
     await updateProductRatingMetrics(productId);
 
     res.status(200).json({
       success: true,
-      message: "Review deleted successfully",
+      message: "Review deleted successfully (soft-deleted)",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Get all reviews (Admin-only list)
+// @route   GET /api/reviews
+// @access  Private/Admin
+const getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ isDeleted: { $ne: true } })
+      .populate("user", "name email profileImage phone")
+      .populate("product", "title category images")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: reviews.length,
+      reviews,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Update review status (Admin moderation)
+// @route   PATCH /api/reviews/:id/status
+// @access  Private/Admin
+const updateReviewStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Review ID format",
+      });
+    }
+
+    const allowedStatuses = ["Pending", "Approved", "Rejected", "Hidden"];
+    if (!status || !allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Allowed values: ${allowedStatuses.join(", ")}`,
+      });
+    }
+
+    const review = await Review.findById(id);
+    if (!review || review.isDeleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Review not found",
+      });
+    }
+
+    // Duplicate verification check
+    if (review.status === status) {
+      return res.status(409).json({
+        success: false,
+        message: "Review already has this status.",
+      });
+    }
+
+    review.status = status;
+    await review.save();
+
+    // Recalculate metrics immediately inside request lifecycle before success response
+    await updateProductRatingMetrics(review.product);
+
+    res.status(200).json({
+      success: true,
+      message: `Review status successfully updated to ${status}`,
+      review,
     });
   } catch (error) {
     res.status(500).json({
@@ -242,4 +330,6 @@ module.exports = {
   addReview,
   updateReview,
   deleteReview,
+  getAllReviews,
+  updateReviewStatus,
 };

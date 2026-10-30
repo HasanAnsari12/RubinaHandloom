@@ -1,0 +1,321 @@
+.coupon-form-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 28px;
+  padding: 8px 12px;
+}
+
+.coupon-inputs-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row-two {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-row-three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.form-group-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.form-group-item label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-group-item input,
+.form-group-item select,
+.form-group-item textarea {
+  width: 100%;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.form-group-item input:focus,
+.form-group-item select:focus,
+.form-group-item textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.form-group-item input.input-invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-glow);
+}
+
+.inline-field-error-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--danger);
+  margin-top: 4px;
+}
+
+/* Right preview column */
+.coupon-preview-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 1px solid var(--border-light);
+  padding-left: 28px;
+}
+
+.preview-column-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+/* Luxury Wine card styles */
+.luxury-wine-coupon-card {
+  width: 100%;
+  background: linear-gradient(135deg, #7B1E3A 0%, #4a0d20 100%);
+  border: 1px solid #D4AF37; /* Luxury Gold border */
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(123, 30, 58, 0.35);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Luxury scale animations */
+.luxury-wine-coupon-card.edit-scaled {
+  transform: scale(0.97);
+}
+
+.card-top-header {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.card-scope-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #D4AF37;
+}
+
+.coupon-ribbon-tag {
+  background-color: #D4AF37;
+  color: #7B1E3A;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.card-inner-body {
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.preview-card-code {
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.preview-card-value {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: #D4AF37;
+}
+
+.preview-card-title {
+  font-size: 12px;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+/* Dashed divider with notches */
+.card-dashed-divider {
+  height: 2px;
+  border-top: 2px dashed rgba(212, 175, 55, 0.3);
+  position: relative;
+  margin: 0 12px;
+}
+
+.card-notch {
+  width: 14px;
+  height: 14px;
+  background-color: var(--card-bg); /* matches form background */
+  border-radius: 50%;
+  position: absolute;
+  top: -8px;
+  z-index: 2;
+  border: 1px solid var(--border-light);
+}
+
+.card-notch.notch-left {
+  left: -20px;
+  border-left: none;
+}
+
+.card-notch.notch-right {
+  right: -20px;
+  border-right: none;
+}
+
+.card-footer-details {
+  padding: 14px 16px;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  text-align: left;
+}
+
+.footer-meta-row {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-meta-row strong {
+  color: white;
+  font-weight: 700;
+}
+
+/* Predicted status block */
+.preview-auto-status-indicator {
+  margin-top: 20px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.preview-auto-status-indicator span {
+  color: var(--text-secondary);
+}
+
+.predicted-status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.predicted-status-badge.predicted-draft {
+  background-color: var(--bg-main);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-medium);
+}
+
+.predicted-status-badge.predicted-scheduled {
+  background-color: var(--primary-glow);
+  color: var(--primary);
+}
+
+.predicted-status-badge.predicted-active {
+  background-color: var(--success-glow);
+  color: var(--success);
+}
+
+.predicted-status-badge.predicted-expired {
+  background-color: var(--warning-glow);
+  color: var(--warning);
+}
+
+.predicted-status-badge.predicted-disabled {
+  background-color: var(--danger-glow);
+  color: var(--danger);
+}
+
+/* Actions footer */
+.modal-actions-full-row {
+  grid-column: span 2;
+  border-top: var(--border-light);
+  padding-top: 20px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.modal-cancel-btn-toolbar {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.modal-cancel-btn-toolbar:hover {
+  background-color: var(--border-medium);
+}
+
+.modal-submit-btn-toolbar {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.modal-submit-btn-toolbar:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary-light);
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+@media (max-width: 768px) {
+  .coupon-form-grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .coupon-preview-column {
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    padding-left: 0;
+    padding-top: 20px;
+  }
+  .modal-actions-full-row {
+    grid-column: span 1;
+  }
+}

@@ -1,0 +1,108 @@
+.report-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.report-stat-card {
+  background-color: var(--card-bg);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.report-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.report-stat-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.report-stat-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.report-stat-icon {
+  font-size: 18px;
+}
+
+.report-stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.report-stat-value-row h3 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.report-stat-diff-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.report-stat-diff-badge.positive {
+  background-color: var(--success-glow);
+  color: var(--success);
+}
+
+.report-stat-diff-badge.negative {
+  background-color: var(--danger-glow);
+  color: var(--danger);
+}
+
+.report-stat-diff-badge.neutral {
+  background-color: var(--bg-main);
+  color: var(--text-muted);
+}
+
+.report-stat-diff-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin: 4px 0 0 0;
+}
+
+/* Skeletons */
+.report-stat-card.skeleton-loading .skeleton-title {
+  height: 12px;
+  width: 60%;
+  background-color: var(--bg-main);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  animation: pulseSkeleton 1.5s infinite;
+}
+
+.report-stat-card.skeleton-loading .skeleton-value {
+  height: 22px;
+  width: 40%;
+  background-color: var(--bg-main);
+  border-radius: 4px;
+  animation: pulseSkeleton 1.5s infinite;
+}
+
+@keyframes pulseSkeleton {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}

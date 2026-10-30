@@ -35,12 +35,24 @@ export const AppProvider = ({ children }) => {
   // -----------------------------
   // Cart State
   // -----------------------------
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user")) || null;
+    if (!savedUser) {
+      return JSON.parse(localStorage.getItem("guest_cart")) || [];
+    }
+    return [];
+  });
 
   // -----------------------------
   // Wishlist State
   // -----------------------------
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user")) || null;
+    if (!savedUser) {
+      return JSON.parse(localStorage.getItem("guest_wishlist")) || [];
+    }
+    return [];
+  });
 
   // -----------------------------
   // Products State
@@ -66,10 +78,13 @@ export const AppProvider = ({ children }) => {
       const fetchCartAndWishlist = async () => {
         try {
           const cartData = await getCart();
-          const items = cartData.cart?.cartItems?.map(item => ({
-            ...item.product,
-            quantity: item.quantity
-          })).filter(item => item && item._id) || [];
+          const items =
+            cartData.cart?.cartItems
+              ?.map((item) => ({
+                ...item.product,
+                quantity: item.quantity,
+              }))
+              .filter((item) => item && item._id) || [];
           setCart(items);
 
           const wishlistData = await getWishlist();
@@ -80,9 +95,6 @@ export const AppProvider = ({ children }) => {
         }
       };
       fetchCartAndWishlist();
-    } else {
-      setCart([]);
-      setWishlist([]);
     }
   }, [user]);
 
@@ -106,31 +118,48 @@ export const AppProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    setCart(JSON.parse(localStorage.getItem("guest_cart")) || []);
+    setWishlist(JSON.parse(localStorage.getItem("guest_wishlist")) || []);
   };
 
   // =============================
-  // CART FUNCTIONS
+  // CART FUNCTIONS (Supports both Guest & Logged-in)
   // =============================
 
   const addToCart = async (product, quantity = 1) => {
-    if (!user) return;
+    const productId = product._id || product.id;
+
+    if (!user) {
+      setCart((prevCart) => {
+        const existingItem = prevCart.find((item) => (item._id || item.id) === productId);
+        let updated;
+        if (existingItem) {
+          updated = prevCart.map((item) =>
+            (item._id || item.id) === productId
+              ? { ...item, quantity: (item.quantity || 1) + quantity }
+              : item
+          );
+        } else {
+          updated = [...prevCart, { ...product, quantity }];
+        }
+        localStorage.setItem("guest_cart", JSON.stringify(updated));
+        return updated;
+      });
+      return;
+    }
+
     try {
-      const productId = product._id || product.id;
       await apiAddToCart(productId, quantity);
 
       setCart((prevCart) => {
-        const existingItem = prevCart.find(
-          (item) => item._id === productId
-        );
-
+        const existingItem = prevCart.find((item) => (item._id || item.id) === productId);
         if (existingItem) {
           return prevCart.map((item) =>
-            item._id === productId
-              ? { ...item, quantity: item.quantity + quantity }
+            (item._id || item.id) === productId
+              ? { ...item, quantity: (item.quantity || 1) + quantity }
               : item
           );
         }
-
         return [...prevCart, { ...product, quantity }];
       });
     } catch (err) {
@@ -140,12 +169,18 @@ export const AppProvider = ({ children }) => {
   };
 
   const removeFromCart = async (productId) => {
-    if (!user) return;
+    if (!user) {
+      setCart((prevCart) => {
+        const updated = prevCart.filter((item) => (item._id || item.id) !== productId);
+        localStorage.setItem("guest_cart", JSON.stringify(updated));
+        return updated;
+      });
+      return;
+    }
+
     try {
       await apiRemoveFromCart(productId);
-      setCart((prevCart) =>
-        prevCart.filter((item) => item._id !== productId)
-      );
+      setCart((prevCart) => prevCart.filter((item) => (item._id || item.id) !== productId));
     } catch (err) {
       console.error("Failed to remove item from database cart:", err);
       throw err;
@@ -153,9 +188,19 @@ export const AppProvider = ({ children }) => {
   };
 
   const updateQuantity = async (productId, quantity) => {
-    if (!user) return;
     if (quantity <= 0) {
       await removeFromCart(productId);
+      return;
+    }
+
+    if (!user) {
+      setCart((prevCart) => {
+        const updated = prevCart.map((item) =>
+          (item._id || item.id) === productId ? { ...item, quantity } : item
+        );
+        localStorage.setItem("guest_cart", JSON.stringify(updated));
+        return updated;
+      });
       return;
     }
 
@@ -163,9 +208,7 @@ export const AppProvider = ({ children }) => {
       await apiUpdateQuantity(productId, quantity);
       setCart((prevCart) =>
         prevCart.map((item) =>
-          item._id === productId
-            ? { ...item, quantity }
-            : item
+          (item._id || item.id) === productId ? { ...item, quantity } : item
         )
       );
     } catch (err) {
@@ -175,7 +218,12 @@ export const AppProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
-    if (!user) return;
+    localStorage.removeItem("guest_cart");
+    if (!user) {
+      setCart([]);
+      return;
+    }
+
     try {
       await apiClearCart();
       setCart([]);
@@ -185,29 +233,34 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Cart Total
-  const cartTotal = cart.reduce(
-    (total, item) => total + item.price * (item.quantity || 1),
-    0
-  );
+  // Cart Total (respects discountPrice if available)
+  const cartTotal = cart.reduce((total, item) => {
+    const itemPrice =
+      item.discountPrice && item.discountPrice > 0 ? item.discountPrice : item.price || 0;
+    return total + itemPrice * (item.quantity || 1);
+  }, 0);
 
   // Cart Count
-  const cartCount = cart.reduce(
-    (count, item) => count + (item.quantity || 1),
-    0
-  );
+  const cartCount = cart.reduce((count, item) => count + (item.quantity || 1), 0);
 
   // =============================
   // WISHLIST FUNCTIONS
   // =============================
 
   const addToWishlist = async (product) => {
-    if (!user) return;
     const productId = product._id || product.id;
-    const exists = wishlist.find(
-      (item) => item._id === productId
-    );
 
+    if (!user) {
+      setWishlist((prev) => {
+        if (prev.find((item) => (item._id || item.id) === productId)) return prev;
+        const updated = [...prev, product];
+        localStorage.setItem("guest_wishlist", JSON.stringify(updated));
+        return updated;
+      });
+      return;
+    }
+
+    const exists = wishlist.find((item) => (item._id || item.id) === productId);
     if (!exists) {
       try {
         await apiAddToWishlist(productId);
@@ -219,12 +272,18 @@ export const AppProvider = ({ children }) => {
   };
 
   const removeFromWishlist = async (productId) => {
-    if (!user) return;
+    if (!user) {
+      setWishlist((prev) => {
+        const updated = prev.filter((item) => (item._id || item.id) !== productId);
+        localStorage.setItem("guest_wishlist", JSON.stringify(updated));
+        return updated;
+      });
+      return;
+    }
+
     try {
       await apiRemoveFromWishlist(productId);
-      setWishlist(
-        wishlist.filter((item) => item._id !== productId)
-      );
+      setWishlist(wishlist.filter((item) => (item._id || item.id) !== productId));
     } catch (err) {
       console.error("Failed to remove item from database wishlist:", err);
     }

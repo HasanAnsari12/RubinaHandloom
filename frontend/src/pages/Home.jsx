@@ -35,61 +35,80 @@ function Home({ searchTerm }) {
   if (error) {
     return <h2 className="error">{error}</h2>;
   }
-// Home.jsx search filtering
-const filteredProducts = products.filter((product) => {
-  // Search Filter (agar searchTerm empty ho to sab products dikhen)
-  const matchesSearch =
-    !searchTerm ||
-    product.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
-  // Category Filter (case-insensitive)
-  const matchesCategory =
-    selectedCategory === "All" ||
-    product.category
-      ?.toLowerCase()
-      .includes(selectedCategory.toLowerCase());
+  const categoryMappings = {
+    "Chanderi Silk": ["chanderi silk", "chanderi"],
+    "Cotton Silk": ["cotton silk"],
+    "Pattu Silk": ["pattu silk"],
+    "Tissue": ["tissue"],
+    "Antique Entice": ["antique entice"],
+    "Bridal": ["bridal"],
+  };
 
-  // Price Filter
-  let matchesPrice = true;
+  const categories = [
+    "All",
+    "Chanderi Silk",
+    "Cotton Silk",
+    "Pattu Silk",
+    
+    "Entice Tissue",
+    "Bridal",
+  ];
 
-  if (selectedPrice === "Under 2000") {
-    matchesPrice = product.price < 2000;
-  } else if (selectedPrice === "2000-5000") {
-    matchesPrice =
-      product.price >= 2000 &&
-      product.price <= 5000;
-  } else if (selectedPrice === "5000-10000") {
-    matchesPrice =
-      product.price > 5000 &&
-      product.price <= 10000;
-  } else if (selectedPrice === "Above 10000") {
-    matchesPrice = product.price > 10000;
-  }
+  const priceRanges = [
+    "All",
+    "Under 2000",
+    "2000-5000",
+    "5000-10000",
+    "Above 10000",
+  ];
 
-  // Final Result
-  return (
-    matchesSearch &&
-    matchesCategory &&
-    matchesPrice
-  );
-});
-const categories = [
-  "All",
-  "Banarasi",
-  "Kanjivaram",
-  "Bridal",
-  "Cotton",
-  "Silk",
-];
-const priceRanges = [
-  "All",
-  "Under 2000",
-  "2000-5000",
-  "5000-10000",
-  "Above 10000",
-];
+  // Home.jsx search filtering
+  const filteredProducts = products.filter((product) => {
+    // Search Filter (agar searchTerm empty ho to sab products dikhen)
+    const matchesSearch =
+      !searchTerm ||
+      product.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Category Filter (case-insensitive with safe display mapping)
+    const matchesCategory =
+      selectedCategory === "All" ||
+      (categoryMappings[selectedCategory]
+        ? categoryMappings[selectedCategory].some(
+            (mapped) =>
+              product.category?.toLowerCase() === mapped ||
+              product.category?.toLowerCase().includes(mapped)
+          )
+        : product.category
+            ?.toLowerCase()
+            .includes(selectedCategory.toLowerCase()));
+
+    // Price Filter
+    let matchesPrice = true;
+
+    if (selectedPrice === "Under 2000") {
+      matchesPrice = product.price < 2000;
+    } else if (selectedPrice === "2000-5000") {
+      matchesPrice =
+        product.price >= 2000 &&
+        product.price <= 5000;
+    } else if (selectedPrice === "5000-10000") {
+      matchesPrice =
+        product.price > 5000 &&
+        product.price <= 10000;
+    } else if (selectedPrice === "Above 10000") {
+      matchesPrice = product.price > 10000;
+    }
+
+    // Final Result
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesPrice
+    );
+  });
 
   return (
     <>
@@ -105,7 +124,7 @@ const priceRanges = [
 
           {/* SUBTITLE */}
           <p>
-            Premium Chanderi, Silk, Cotton & Bridal Sarees crafted with timeless
+            Premium Chanderi Silk Sarees & Suits,Bridal Sarees crafted with timeless
             Indian artistry.
           </p>
 
@@ -140,8 +159,9 @@ const priceRanges = [
 
         <div className="hero-image-wrapper">
           <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBldC_vhIUCWX0RRIKJOjJEWM1QvtJ7VGLG4BygQBm8Kfdo-Vh55ZHUaZVeS2KfY9fGh4Kr8-UQNGViqd_ohUgOEUz7pFwwtZnt7bL_tBdTqU4RY8Gz2uo7HnDPqqNP0QUtsrBHlwuk9nvciyukhz6P3cmaUk3sh4weXbgsDtEwmF2wPpDgwy8YZL8oMb3FcWPbxD2MpHwcTDDy9G0Oy8gatV7jCnu4QIy9Eg4z58Q69YKY6sX91_XyF-JwZZbsfIsJ9q2bdSELX2k"
-            alt="Luxury Saree"
+            src="/images/hero-blue-chanderi-saree.png"
+            alt="Woman wearing blue Chanderi silk saree with golden border and floral motifs"
+            style={{ objectFit: "contain", objectPosition: "center top" }}
           />
         </div>
       </section>
@@ -165,7 +185,7 @@ const priceRanges = [
     {categories.map((category) => (
       <button
         key={category}
-        onClick={() => setSelectedCategory(category)}
+        onClick={() => setSelectedCategory(selectedCategory === category ? "All" : category)}
         style={{
           padding: "10px 18px",
           border: "none",
@@ -239,7 +259,9 @@ const priceRanges = [
             <img
               src={
                 product.images?.[0]?.url ||
-                "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
+                (typeof product.images?.[0] === "string" ? product.images[0] : null) ||
+                product.image ||
+                "/images/saree1.jpg"
               }
               alt={product.title}
             />
@@ -287,10 +309,11 @@ const priceRanges = [
      <section className="bridal-section">
   <div className="bg-layer">
 
-    {/* SAME IMAGE */}
+    {/* Red Saree Pallu - User Supplied Photograph */}
     <img
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSCci17qkYBO9j55uvYLzF8K1yCrLwk5c7xgS8G8gyniV4j44ttV5XJ2z9CsZduGWfqQfuZJVyN5MwBLCup6UzBID7Sw5psIGQXJmWaC1IAZpfji6dKpB6m_6DJEJ-k4r7FISsOpt9qhzOKWclfpjmx0Vx9WKZ66CbZGva3y3jk_OjuJzL2-UBguPb-iOTb4xZiINUBzWcCJXWHrSj7dVbsgFdvbdPOd5G41VGo-wkOwaqSq8huFroIhAvVDhvQyfsqXV8pmjnrG8"
-      alt="Bridal Saree"
+      src="/images/bridal-red-saree-pallu.jpg"
+      alt="Red silk saree with golden pallu and intricate wave border patterns"
+      style={{ objectFit: "cover", objectPosition: "center" }}
     />
 
     <div className="overlay"></div>
@@ -380,7 +403,7 @@ const priceRanges = [
         </h2>
 
         <p>
-          Rubina Handloom Saree is dedicated to preserving the beauty of authentic
+          SRK Handloom is dedicated to preserving the beauty of authentic
           Indian handloom craftsmanship. Our collection features carefully selected
           Chanderi and traditional sarees that combine royal elegance with modern
           sophistication.
@@ -428,7 +451,7 @@ const priceRanges = [
           }}
         >
           <p>
-            At Rubina Handloom Saree, we believe handloom is more than fashion —
+            At SRK Handloom, we believe handloom is more than fashion —
             it is a symbol of Indian culture, tradition, and artistry. Our mission
             is to bring premium-quality handloom sarees to women who appreciate
             elegance, authenticity, and timeless craftsmanship.
@@ -468,12 +491,15 @@ const priceRanges = [
 {/* FLOATING WHATSAPP BUTTON */}
 
 <a
-  href="https://wa.me/917470507311"
+  href="https://wa.me/917000438132"
   target="_blank"
   rel="noopener noreferrer"
   className="whatsapp-float"
+  aria-label="Chat with SRK Handloom on WhatsApp"
 >
-  💬
+  <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
 </a>
       {/* FOOTER */}
       <footer className="footer">
@@ -482,31 +508,11 @@ const priceRanges = [
 
     {/* Column 1 — Brand */}
     <div className="footer-box brand-box">
-      <h2 className="footer-logo">Rubina Handloom Sarees</h2>
+      <h2 className="footer-logo">SRK Handloom</h2>
       <p className="footer-tagline">Timeless Elegance Woven With Heritage</p>
       <p className="footer-desc">
         Premium Chanderi, Silk &amp; Bridal Sarees handcrafted with authentic Indian artistry.
       </p>
-      <div className="footer-social">
-        {/* Instagram */}
-        <a href="#" aria-label="Instagram">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-        </a>
-        {/* Facebook */}
-        <a href="#" aria-label="Facebook">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-          </svg>
-        </a>
-        {/* WhatsApp */}
-        <a href="https://wa.me/917470507311" target="_blank" rel="noreferrer" aria-label="WhatsApp">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-          </svg>
-        </a>
-      </div>
     </div>
 
     {/* Column 2 — Quick Links */}
@@ -532,22 +538,85 @@ const priceRanges = [
       <h3>Contact</h3>
       <div className="footer-contact-item">
         <span className="footer-contact-icon">✉</span>
-        <span>support@rubinahandloom.com</span>
+        <span>asarik782@gmail.com</span>
       </div>
       <div className="footer-contact-item">
         <span className="footer-contact-icon">☎</span>
-        <span>+91 74705 07311</span>
+        <span>+91 7000438132</span>
       </div>
       <div className="footer-contact-item">
         <span className="footer-contact-icon">⊙</span>
-        <span>Chanderi, Madhya Pradesh</span>
+        <span> Baher Sahar Ward no. 16 Chanderi Dist Ashok Nagar, Madhya Pradesh</span>
+      </div>
+
+      {/* Social Media Brand Icons */}
+      <div className="footer-social" style={{ marginTop: "16px" }}>
+        {/* Instagram */}
+        <a
+          href="https://www.instagram.com/luxuriouse_boutique?exln=MTBvdnlwMGJ1M3J5bQ=="
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit SRK Handloom on Instagram"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+        </a>
+
+        {/* YouTube */}
+        <a
+          href="https://youtube.com/@srk_handloom?si=WdMk0xoIxg0WVgnQ"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit SRK Handloom on YouTube"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </a>
+
+        {/* X (formerly Twitter) */}
+        <a
+          href="https://x.com/hathdraha"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit SRK Handloom on X"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+
+        {/* WhatsApp */}
+        <a
+          href="https://wa.me/917000438132"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat with SRK Handloom on WhatsApp"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        </a>
+
+        {/* Pinterest */}
+        <a
+          href="https://pin.it/6YdTY3unI"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit SRK Handloom on Pinterest"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0a12 12 0 0 0-4.37 23.18c-.07-.94-.13-2.39.03-3.42l1.16-4.94s-.29-.6-.29-1.48c0-1.39.81-2.43 1.81-2.43.85 0 1.26.64 1.26 1.41 0 .86-.55 2.14-.83 3.33-.24 1 .5 1.82 1.48 1.82 1.78 0 3.15-1.88 3.15-4.58 0-2.4-1.72-4.07-4.18-4.07-2.85 0-4.52 2.14-4.52 4.35 0 .86.33 1.79.74 2.29.08.1.09.19.07.29-.08.31-.25 1.03-.29 1.17-.05.19-.16.23-.37.14-1.38-.64-2.24-2.66-2.24-4.28 0-3.48 2.53-6.68 7.3-6.68 3.83 0 6.81 2.73 6.81 6.38 0 3.81-2.4 6.88-5.73 6.88-1.12 0-2.17-.58-2.53-1.27l-.69 2.63c-.25.96-.92 2.16-1.37 2.89A12 12 0 1 0 12 0z"/>
+          </svg>
+        </a>
       </div>
     </div>
 
   </div>
 
   <div className="footer-bottom">
-    © 2026 Rubina Handloom Sarees. All Rights Reserved.
+    © 2026 SRK Handloom. All Rights Reserved.
   </div>
 
 </footer>

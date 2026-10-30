@@ -125,9 +125,19 @@ function Orders() {
                     return (
                       <div key={idx} className="card-product-item">
                         <img
-                          src={product.images?.[0]?.url || product.image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&q=80"}
+                          src={
+                            (typeof product.images?.[0] === "string" ? product.images[0] : product.images?.[0]?.url) ||
+                            product.image ||
+                            "/images/saree1.jpg"
+                          }
                           alt={product.title}
                           className="card-product-img"
+                          onError={(e) => {
+                            if (e.currentTarget.getAttribute("data-fallback") !== "true") {
+                              e.currentTarget.setAttribute("data-fallback", "true");
+                              e.currentTarget.src = "/images/saree1.jpg";
+                            }
+                          }}
                         />
                         <div className="card-product-info">
                           <h4>{product.title || "Handloom Saree"}</h4>
@@ -189,9 +199,19 @@ function Orders() {
                       return (
                         <div key={idx} className="modal-product-item">
                           <img
-                            src={product.images?.[0]?.url || product.image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&q=80"}
+                            src={
+                              (typeof product.images?.[0] === "string" ? product.images[0] : product.images?.[0]?.url) ||
+                              product.image ||
+                              "/images/saree1.jpg"
+                            }
                             alt={product.title}
                             className="modal-product-img"
+                            onError={(e) => {
+                              if (e.currentTarget.getAttribute("data-fallback") !== "true") {
+                                e.currentTarget.setAttribute("data-fallback", "true");
+                                e.currentTarget.src = "/images/saree1.jpg";
+                              }
+                            }}
                           />
                           <div className="modal-product-info">
                             <h4>{product.title || "Handloom Saree"}</h4>
@@ -249,7 +269,7 @@ function Orders() {
                       <div className="step-bullet">✓</div>
                       <div className="step-info">
                         <h4>Delivered</h4>
-                        <p>Enjoy your handcrafted Rubina Handloom saree!</p>
+                        <p>Enjoy your handcrafted SRK Handloom saree!</p>
                       </div>
                     </div>
                   </div>

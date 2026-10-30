@@ -1,0 +1,156 @@
+.user-row-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-row-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-medium);
+}
+
+.user-row-avatar-fallback {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--primary-glow);
+  color: var(--primary);
+  border: 1px solid rgba(123, 30, 58, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.user-row-title-detail {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.user-row-name-text {
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.user-row-name-text:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.user-row-id-sub {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.user-row-email-cell,
+.user-row-phone-cell,
+.user-row-joined-cell {
+  color: var(--text-secondary);
+}
+
+/* Email Verification Row badge */
+.email-row-verif-badge {
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.email-row-verif-badge.verified {
+  color: var(--success);
+}
+
+.email-row-verif-badge.unverified {
+  color: var(--warning);
+}
+
+.user-row-actions-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.row-role-dropdown-select {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: var(--border-radius-sm);
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  color: var(--text-primary);
+}
+
+.row-role-dropdown-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.row-action-btn.block-btn.active {
+  color: var(--warning);
+}
+
+.row-action-btn.block-btn.active:hover:not(:disabled) {
+  background-color: var(--warning-glow);
+  border-color: var(--warning);
+}
+
+.row-action-btn.block-btn.blocked {
+  color: var(--success);
+}
+
+.row-action-btn.block-btn.blocked:hover:not(:disabled) {
+  background-color: var(--success-glow);
+  border-color: var(--success);
+}
+
+/* Tooltip styles for disabled self protection actions */
+.action-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.action-tooltip-wrapper.has-tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--text-primary);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  z-index: 100;
+  pointer-events: none;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.action-tooltip-wrapper.has-tooltip:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--text-primary) transparent transparent transparent;
+  z-index: 100;
+  pointer-events: none;
+}

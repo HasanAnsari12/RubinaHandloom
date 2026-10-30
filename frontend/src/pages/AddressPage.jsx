@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddressPage.css";
 
@@ -17,17 +17,9 @@ function AddressPage() {
     pincode: "",
   });
 
-  const [savedAddresses, setSavedAddresses] =
-    useState([]);
-
-  useEffect(() => {
-    const data =
-      JSON.parse(
-        localStorage.getItem("addresses")
-      ) || [];
-
-    setSavedAddresses(data);
-  }, []);
+  const [savedAddresses, setSavedAddresses] = useState(() => {
+    return JSON.parse(localStorage.getItem("addresses")) || [];
+  });
 
   const handleChange = (e) => {
     setAddress({

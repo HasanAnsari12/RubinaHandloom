@@ -6,14 +6,23 @@ const couponSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      trim: true,
       uppercase: true,
+    },
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      default: "",
       trim: true,
     },
     discountType: {
       type: String,
+      enum: ["Percentage", "Flat"],
       required: true,
-      enum: ["percentage", "fixed"],
-      default: "percentage",
     },
     discountValue: {
       type: Number,
@@ -25,29 +34,66 @@ const couponSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-    maximumDiscount: {
+    maximumDiscountAmount: {
       type: Number,
+      default: null,
       min: 0,
-    },
-    expiryDate: {
-      type: Date,
-      required: true,
     },
     usageLimit: {
       type: Number,
-      default: null, // null represents unlimited usage
+      default: 1,
       min: 1,
     },
     usedCount: {
       type: Number,
-      required: true,
       default: 0,
       min: 0,
     },
-    isActive: {
-      type: Boolean,
+    validFrom: {
+      type: Date,
       required: true,
-      default: true,
+    },
+    validUntil: {
+      type: Date,
+      required: true,
+    },
+    applicableOn: {
+      type: String,
+      enum: ["All Products", "Categories", "Products"],
+      default: "All Products",
+    },
+    applicableProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    applicableCategories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+      },
+    ],
+    isStackable: {
+      type: Boolean,
+      default: false,
+    },
+    usagePerCustomer: {
+      type: Number,
+      default: 1,
+      min: 1,
+    },
+    status: {
+      type: String,
+      enum: ["Draft", "Scheduled", "Active", "Expired", "Disabled"],
+      default: "Draft",
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
     },
   },
   {

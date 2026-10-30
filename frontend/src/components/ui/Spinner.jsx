@@ -1,5 +1,4 @@
 // frontend/src/components/ui/Spinner.jsx
-import React from 'react';
 
 function Spinner({ size = 'medium', fullscreen = false }) {
   const spinnerStyles = `

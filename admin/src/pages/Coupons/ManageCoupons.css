@@ -1,0 +1,124 @@
+.coupon-management-page {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Bulk selection panel actions */
+.table-bulk-actions-placeholder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.bulk-selection-count-text {
+  font-size: 13px;
+  color: var(--primary);
+}
+
+.bulk-buttons-deck {
+  display: flex;
+  gap: 8px;
+}
+
+.bulk-bar-btn {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.bulk-bar-btn:hover:not(:disabled) {
+  background-color: var(--bg-main);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.bulk-bar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Delete confirmation panel modal layouts */
+.delete-coupon-modal-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.disable-instead-caution-banner {
+  background-color: var(--primary-glow);
+  border: 1px solid rgba(123, 30, 58, 0.15);
+  padding: 10px 14px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 4px;
+}
+
+.recommended-disable-badge {
+  font-size: 9px;
+  font-weight: 800;
+  color: white;
+  background-color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.disable-instead-caution-banner p {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Complete coupon summary card display before delete */
+.delete-preview-summary-card {
+  background-color: var(--bg-main);
+  border: var(--border-light);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.summary-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-medium);
+  padding-bottom: 6px;
+}
+
+.summary-field:last-child,
+.summary-field:nth-last-child(2) {
+  border-bottom: none;
+}
+
+.summary-field strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.delete-warning-banner-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--danger);
+  line-height: 1.5;
+  text-align: left;
+  display: block;
+}

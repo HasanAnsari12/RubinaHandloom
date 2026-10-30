@@ -20,7 +20,11 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({ email });
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = name.trim();
+    const cleanPhone = phone ? phone.trim() : "";
+
+    const existingUser = await User.findOne({ email: cleanEmail });
 
     if (existingUser) {
       return res.status(400).json({
@@ -42,9 +46,9 @@ const registerUser = async (req, res) => {
       .digest("hex");
 
     const user = await User.create({
-      name,
-      phone,
-      email,
+      name: cleanName,
+      phone: cleanPhone,
+      email: cleanEmail,
       password: hashedPassword,
       isVerified: false,
       emailVerificationToken: hashedVerificationToken,
@@ -52,14 +56,22 @@ const registerUser = async (req, res) => {
       lastVerificationEmailSentAt: Date.now(),
     });
 
-    // Send verification email with the raw token (asynchronously to avoid blocking response)
-    sendVerificationEmail(user.email, verificationToken).catch((err) => {
+    // Send verification email with the raw token
+    let emailDelivery = null;
+    try {
+      emailDelivery = await sendVerificationEmail(user.email, verificationToken);
+    } catch (err) {
       console.error("Failed to send verification email in background:", err.message);
-    });
+    }
+
+    const emailSent = Boolean(emailDelivery && emailDelivery.delivered);
 
     res.status(201).json({
       success: true,
-      message: "User registered successfully. Please check your email to verify your account.",
+      message: emailSent
+        ? "User registered successfully. Please check your email to verify your account."
+        : "User registered successfully. However, verification email delivery via SMTP failed. Please check your email settings or request a verification resend.",
+      emailDelivered: emailSent,
       user: {
         _id: user._id,
         name: user.name,
@@ -88,7 +100,9 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    const cleanEmail = email.trim().toLowerCase();
+    const query = User.findOne({ email: cleanEmail });
+    const user = await (typeof query?.select === "function" ? query.select("+password") : query);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({
@@ -97,11 +111,27 @@ const loginUser = async (req, res) => {
       });
     }
 
+    // Prevent login if account is deactivated/deleted
+    if (user.isDeleted) {
+      return res.status(401).json({
+        success: false,
+        message: "This account has been deactivated. Please contact support.",
+      });
+    }
+
     // Prevent login if email is not verified
     if (!user.isVerified) {
       return res.status(401).json({
         success: false,
         message: "Please verify your email address to log in.",
+      });
+    }
+
+    // Prevent login if account is blocked
+    if (user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been blocked. Please contact support.",
       });
     }
 
@@ -125,14 +155,19 @@ const loginUser = async (req, res) => {
   }
 };
 
-// @desc    Generate password reset token and send email
-// @route   POST /api/auth/forgot-password
-// @access  Public
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!email || typeof email !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid email address",
+      });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: cleanEmail });
 
     // Prevent account enumeration: return success even if user does not exist
     if (!user) {
@@ -164,10 +199,20 @@ const forgotPassword = async (req, res) => {
 
     await user.save();
 
-    // Send reset email asynchronously in background
-    sendPasswordResetEmail(user.email, resetToken).catch((err) => {
+    // Send reset email
+    let emailDelivery = null;
+    try {
+      emailDelivery = await sendPasswordResetEmail(user.email, resetToken);
+    } catch (err) {
       console.error("Failed to send password reset email in background:", err.message);
-    });
+    }
+
+    if (!emailDelivery || !emailDelivery.delivered) {
+      return res.status(502).json({
+        success: false,
+        message: "Failed to dispatch password reset email via SMTP. Please try again later or contact support.",
+      });
+    }
 
     res.status(200).json({
       success: true,
@@ -232,10 +277,11 @@ const resetPassword = async (req, res) => {
       .update(token)
       .digest("hex");
 
-    const user = await User.findOne({
+    const query = User.findOne({
       resetToken: hashedToken,
       resetTokenExpire: { $gt: Date.now() },
     });
+    const user = await (typeof query?.select === "function" ? query.select("+password") : query);
 
     if (!user) {
       return res.status(400).json({
@@ -291,9 +337,8 @@ const changePassword = async (req, res) => {
     const { currentPassword, newPassword } =
       req.body;
 
-    const user = await User.findById(
-      req.user._id
-    );
+    const query = User.findById(req.user._id);
+    const user = await (typeof query?.select === "function" ? query.select("+password") : query);
 
     if (!user) {
       return res.status(404).json({
@@ -315,12 +360,29 @@ const changePassword = async (req, res) => {
       });
     }
 
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "New password must be at least 6 characters long",
+      });
+    }
+
+    if (currentPassword === newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password cannot be the same as your current password.",
+      });
+    }
+
     const salt = await bcrypt.genSalt(10);
 
     user.password = await bcrypt.hash(
       newPassword,
       salt
     );
+
+    // Track password change for JWT session invalidation
+    user.passwordChangedAt = Date.now();
 
     await user.save();
 
@@ -346,7 +408,7 @@ const renderVerificationPage = (success, message, redirectUrl) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>${success ? 'Email Verified Successfully' : 'Verification Failed'} | Rubina Handloom</title>
+      <title>${success ? 'Email Verified Successfully' : 'Verification Failed'} | SRK Handloom</title>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
       <style>
         * {
@@ -462,7 +524,7 @@ const renderVerificationPage = (success, message, redirectUrl) => {
     </head>
     <body>
       <div class="container">
-        <div class="brand-header">RUBINA</div>
+        <div class="brand-header">SRK HANDLOOM</div>
         
         <div class="icon-wrapper ${success ? 'icon-success' : 'icon-error'}">
           ${success ? '✓' : '✗'}
@@ -501,7 +563,15 @@ const verifyEmail = async (req, res) => {
       emailVerificationToken: hashedToken,
     });
 
+    const wantsJson = req.headers.accept && req.headers.accept.includes("application/json");
+
     if (!user) {
+      if (wantsJson) {
+        return res.status(400).json({
+          success: false,
+          message: "The verification link is invalid or has already been used. Please try logging in or request a new verification email.",
+        });
+      }
       const html = renderVerificationPage(
         false,
         "The verification link is invalid or has already been used. Please try logging in or request a new verification email.",
@@ -513,6 +583,12 @@ const verifyEmail = async (req, res) => {
 
     // Check if expired
     if (user.emailVerificationTokenExpire < Date.now()) {
+      if (wantsJson) {
+        return res.status(400).json({
+          success: false,
+          message: "This verification link has expired. Please request a new one by trying to log in.",
+        });
+      }
       const html = renderVerificationPage(
         false,
         "This verification link has expired. Please request a new one by trying to log in.",
@@ -530,6 +606,13 @@ const verifyEmail = async (req, res) => {
 
     await user.save();
 
+    if (wantsJson) {
+      return res.status(200).json({
+        success: true,
+        message: "Your email has been verified successfully. You can now log in.",
+      });
+    }
+
     const html = renderVerificationPage(
       true,
       "Your email has been verified successfully. You can now log in to explore our collection of premium handloom sarees.",
@@ -538,6 +621,12 @@ const verifyEmail = async (req, res) => {
     res.setHeader("Content-Type", "text/html");
     return res.status(200).send(html);
   } catch (error) {
+    if (req.headers.accept && req.headers.accept.includes("application/json")) {
+      return res.status(500).json({
+        success: false,
+        message: `An internal error occurred: ${error.message}`,
+      });
+    }
     const html = renderVerificationPage(
       false,
       `An internal error occurred: ${error.message}`,
@@ -553,14 +642,15 @@ const resendVerificationEmail = async (req, res) => {
   try {
     const { email } = req.body;
 
-    if (!email) {
+    if (!email || typeof email !== "string") {
       return res.status(400).json({
         success: false,
-        message: "Please provide an email address",
+        message: "Please provide a valid email address",
       });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: cleanEmail });
 
     if (!user) {
       return res.status(404).json({
@@ -601,10 +691,20 @@ const resendVerificationEmail = async (req, res) => {
 
     await user.save();
 
-    // Send verification email (asynchronously to avoid blocking response)
-    sendVerificationEmail(user.email, verificationToken).catch((err) => {
+    // Send verification email
+    let emailDelivery = null;
+    try {
+      emailDelivery = await sendVerificationEmail(user.email, verificationToken);
+    } catch (err) {
       console.error("Failed to send verification email in background:", err.message);
-    });
+    }
+
+    if (!emailDelivery || !emailDelivery.delivered) {
+      return res.status(502).json({
+        success: false,
+        message: "Failed to deliver verification email via SMTP. Please verify SMTP settings or try again later.",
+      });
+    }
 
     res.status(200).json({
       success: true,

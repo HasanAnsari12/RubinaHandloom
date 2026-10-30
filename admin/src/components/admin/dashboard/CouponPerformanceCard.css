@@ -1,0 +1,106 @@
+.coupon-performance-dashboard-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+}
+
+.perf-code-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.perf-campaign-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary);
+  background-color: var(--primary-glow);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+.perf-code-text {
+  font-family: monospace;
+  font-size: 16px;
+  color: var(--text-primary);
+  border: 1px dashed var(--border-medium);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.perf-campaign-title-label h5 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.perf-kpi-deck-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  background-color: var(--bg-main);
+  border: var(--border-light);
+  border-radius: var(--border-radius-sm);
+  padding: 12px 10px;
+}
+
+.perf-kpi-block-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.perf-kpi-block-item span {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.perf-kpi-block-item strong {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+
+.perf-kpi-block-item strong.savings-green-value {
+  color: var(--success);
+}
+
+.coupon-performance-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.coupon-performance-empty span {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.coupon-performance-empty p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Skeleton Loading states */
+.coupon-perf-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-perf-line {
+  height: 38px;
+  background-color: var(--bg-main);
+  border-radius: var(--border-radius-sm);
+}

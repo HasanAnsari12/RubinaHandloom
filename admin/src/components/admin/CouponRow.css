@@ -1,0 +1,192 @@
+.coupon-code-row-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.coupon-code-span-cell {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--primary);
+  background-color: var(--primary-glow);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.coupon-code-span-cell:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.copy-clipboard-mini-btn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-medium);
+  background-color: var(--bg-main);
+}
+
+.copy-clipboard-mini-btn:hover {
+  background-color: var(--border-medium);
+  transform: scale(1.05);
+}
+
+.coupon-title-cell-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.coupon-title-strong {
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.coupon-title-strong:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.coupon-desc-cell-subtext {
+  font-size: 11px;
+  color: var(--text-muted);
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.discount-badge-cell {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.min-order-cell-text {
+  color: var(--text-secondary);
+}
+
+/* Row usage details */
+.unlimited-uses-row-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary);
+  background-color: var(--primary-glow);
+  padding: 3px 8px;
+  border-radius: 99px;
+  border: 1px solid rgba(123, 30, 58, 0.15);
+}
+
+.row-usage-kpi-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100px;
+}
+
+.usage-row-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.warning-ex-lbl {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--danger);
+  background-color: var(--danger-glow);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.row-usage-bar-track {
+  height: 4px;
+  background-color: var(--bg-main);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.row-usage-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+}
+
+/* Validity details */
+.validity-row-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  font-size: 12px;
+}
+
+.validity-row-details span {
+  color: var(--text-secondary);
+}
+
+.validity-indicator-tag {
+  margin-top: 4px;
+}
+
+.expiry-indicator-dot {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+}
+
+.expiry-indicator-dot.expired {
+  background-color: var(--bg-main);
+  color: var(--text-secondary);
+}
+
+.expiry-indicator-dot.active {
+  background-color: var(--success-glow);
+  color: var(--success);
+}
+
+.coupon-row-date-cell {
+  color: var(--text-secondary);
+}
+
+.coupon-row-actions-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.row-action-btn.toggle-status-btn.enable {
+  color: var(--success);
+}
+
+.row-action-btn.toggle-status-btn.enable:hover {
+  background-color: var(--success-glow);
+  border-color: var(--success);
+}
+
+.row-action-btn.toggle-status-btn.disable {
+  color: var(--danger);
+}
+
+.row-action-btn.toggle-status-btn.disable:hover {
+  background-color: var(--danger-glow);
+  border-color: var(--danger);
+}

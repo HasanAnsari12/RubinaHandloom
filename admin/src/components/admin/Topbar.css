@@ -1,73 +1,59 @@
-.admin-topbar {
-  height: 70px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
+.luxury-topbar {
+  height: 76px;
+  background-color: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: var(--border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
+  padding: 0 32px;
   position: sticky;
   top: 0;
-  z-index: 90;
+  z-index: 80;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-smooth);
 }
 
-.topbar-welcome {
-  font-size: 13px;
-  font-weight: 600;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  padding: 6px 12px;
-  border-radius: 20px;
+.topbar-left-section {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 16px;
+  flex: 1;
 }
 
-.topbar-welcome::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  background: #10b981;
-  border-radius: 50%;
-}
-
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.admin-profile-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.admin-avatar {
-  font-size: 18px;
-}
-
-.admin-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-
-.logout-btn {
-  background: transparent;
-  border: 1px solid #ccc;
-  color: #666;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
+.mobile-menu-toggle-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  color: var(--text-primary);
+  padding: 8px;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-fast);
 }
 
-.logout-btn:hover {
-  background: #fdfafb;
-  border-color: #7b0f1a;
-  color: #7b0f1a;
+.mobile-menu-toggle-btn:hover {
+  background-color: var(--primary-glow);
+}
+
+.topbar-right-section {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.divider-line {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(123, 30, 58, 0.1);
+}
+
+@media (max-width: 991px) {
+  .luxury-topbar {
+    padding: 0 20px;
+  }
+  .mobile-menu-toggle-btn {
+    display: block;
+  }
 }

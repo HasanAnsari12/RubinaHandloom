@@ -11,10 +11,10 @@ cloudinary.config({
  * Upload a file buffer directly to Cloudinary.
  * 
  * @param {Buffer} fileBuffer - The image file buffer from memory
- * @param {string} [folder="rubina-handloom/products"] - Destination folder path
+ * @param {string} [folder="srk-handloom/products"] - Destination folder path
  * @returns {Promise<object>} Promise resolving to Cloudinary upload results
  */
-const uploadBuffer = (fileBuffer, folder = "rubina-handloom/products") => {
+const uploadBuffer = (fileBuffer, folder = "srk-handloom/products") => {
   return new Promise((resolve, reject) => {
     // Validate credentials presence before streaming
     if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
@@ -49,7 +49,7 @@ const uploadBuffer = (fileBuffer, folder = "rubina-handloom/products") => {
 /**
  * Delete an asset from Cloudinary using its public ID.
  * 
- * @param {string} publicId - The Cloudinary public ID (e.g. "rubina-handloom/products/xyz")
+ * @param {string} publicId - The Cloudinary public ID (e.g. "srk-handloom/products/xyz")
  * @returns {Promise<object>} Promise resolving to Cloudinary delete response
  */
 const deleteImage = (publicId) => {

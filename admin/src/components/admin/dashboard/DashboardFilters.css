@@ -1,0 +1,112 @@
+.dashboard-filters-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--border-light);
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-presets-deck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-main);
+  padding: 4px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-medium);
+}
+
+.filter-preset-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.filter-preset-btn:hover:not(:disabled) {
+  color: var(--primary);
+  background-color: var(--border-medium);
+}
+
+.filter-preset-btn.active {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 2px 6px var(--primary-glow);
+}
+
+.filter-preset-btn.custom-preset-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Refresh console action button */
+.console-refresh-kpi-btn {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+}
+
+.console-refresh-kpi-btn:hover:not(:disabled) {
+  background-color: var(--bg-main);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.console-refresh-kpi-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.console-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(123, 30, 58, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: consoleSpin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes consoleSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .dashboard-filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-presets-deck {
+    flex-wrap: wrap;
+  }
+  .filter-preset-btn {
+    flex: 1;
+    text-align: center;
+  }
+  .console-refresh-kpi-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

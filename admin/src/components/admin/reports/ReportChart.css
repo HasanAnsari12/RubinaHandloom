@@ -1,0 +1,56 @@
+.report-chart-wrapper {
+  background-color: var(--card-bg);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.report-chart-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 0 0 18px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.report-chart-body {
+  width: 100%;
+}
+
+/* Custom tooltip */
+.report-chart-tooltip {
+  background-color: var(--card-bg);
+  border: var(--border-medium);
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.chart-tooltip-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.chart-tooltip-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.chart-tooltip-name {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.chart-tooltip-value {
+  font-weight: 800;
+}

@@ -1,0 +1,35 @@
+.category-row-name-text {
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.category-row-name-text:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.category-row-slug-code {
+  font-family: monospace;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--primary);
+}
+
+.category-row-count-cell {
+  color: var(--text-secondary);
+}
+
+.category-row-date-cell {
+  color: var(--text-secondary);
+}
+
+.category-row-actions-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}

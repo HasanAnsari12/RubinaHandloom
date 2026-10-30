@@ -1,0 +1,127 @@
+.products-toolbar-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--border-light);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.products-filters-deck {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.toolbar-select-filter {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  padding: 8px 14px;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.toolbar-select-filter:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.clear-filters-btn-toolbar {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--danger);
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-fast);
+}
+
+.clear-filters-btn-toolbar:hover {
+  background-color: var(--danger-glow);
+}
+
+/* Toolbar Search Box */
+.toolbar-search-box-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  padding: 8px 14px;
+  width: 100%;
+  max-width: 280px;
+  position: relative;
+  transition: var(--transition-smooth);
+}
+
+.toolbar-search-box-wrapper:focus-within {
+  background-color: var(--card-bg);
+  border-color: var(--primary-light);
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.toolbar-search-icon {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-right: 8px;
+}
+
+.toolbar-search-input {
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text-primary);
+  width: 100%;
+  font-weight: 500;
+}
+
+.toolbar-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.clear-search-x-btn {
+  background: none;
+  border: none;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  position: absolute;
+  right: 10px;
+}
+
+.clear-search-x-btn:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 991px) {
+  .products-toolbar-container {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .toolbar-search-box-wrapper {
+    max-width: 100%;
+  }
+  .products-filters-deck {
+    width: 100%;
+  }
+  .toolbar-select-filter {
+    flex: 1;
+    min-width: 140px;
+  }
+}

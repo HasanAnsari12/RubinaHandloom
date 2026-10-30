@@ -10,10 +10,15 @@ build/
 
 # Environment files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+!.env.sample
+!**/.env.sample
+*.local
+
 
 # Logs
 logs/
@@ -42,3 +47,8 @@ uploads/
 
 # Test coverage
 coverage/
+
+# Internal security audit documentation
+ECOMMERCE_BACKEND_SECURITY_AUDIT.md
+
+backend/.env

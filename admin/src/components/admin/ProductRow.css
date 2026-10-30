@@ -1,0 +1,154 @@
+.product-table-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.product-title-detail {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.product-title-text {
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.product-title-text:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.product-id-sub {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.product-category-cell,
+.product-date-cell {
+  color: var(--text-secondary);
+}
+
+.product-price-cell {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.product-stock-cell {
+  font-weight: 500;
+}
+
+.stock-number-text.warning-stock {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.action-buttons-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.row-action-btn {
+  background: none;
+  border: 1px solid var(--border-medium);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.row-action-btn.view:hover {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.row-action-btn.edit {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.row-action-btn.edit:hover {
+  background-color: var(--primary-light);
+}
+
+.row-action-btn.delete {
+  color: var(--danger);
+}
+
+.row-action-btn.delete:hover {
+  background-color: var(--danger-glow);
+  border-color: var(--danger);
+}
+
+/* Reserved Dropdown Menu */
+.reserved-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.reserved-menu-trigger-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reserved-menu-trigger-btn:hover {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.reserved-action-dropdown {
+  position: absolute;
+  right: 0;
+  top: 26px;
+  background-color: var(--card-bg);
+  border: var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 50;
+  width: 160px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.reserved-action-dropdown button {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition-fast);
+}
+
+.reserved-action-dropdown button:hover {
+  background-color: var(--bg-main);
+  color: var(--primary);
+}

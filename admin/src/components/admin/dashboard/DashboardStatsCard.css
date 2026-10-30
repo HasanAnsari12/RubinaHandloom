@@ -1,0 +1,128 @@
+.dashboard-stats-card {
+  background-color: var(--card-bg);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
+}
+
+.stats-card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stats-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-card-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--bg-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border: 1px solid var(--border-medium);
+}
+
+.stats-card-value-display {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.stats-card-value-display h3 {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.stats-card-trend-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.stats-card-trend-badge.positive {
+  background-color: var(--success-glow);
+  color: var(--success);
+}
+
+.stats-card-trend-badge.negative {
+  background-color: var(--danger-glow);
+  color: var(--danger);
+}
+
+.stats-card-trend-badge.neutral {
+  background-color: var(--bg-main);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-medium);
+}
+
+.stats-card-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Skeleton Loading states */
+.dashboard-stats-card.skeleton-loading {
+  cursor: wait;
+}
+
+.dashboard-stats-card.skeleton-loading .skeleton-title {
+  width: 60%;
+  height: 14px;
+  background-color: var(--bg-main);
+  border-radius: 4px;
+  margin-bottom: 16px;
+  animation: pulseSkeleton 1.5s infinite;
+}
+
+.dashboard-stats-card.skeleton-loading .skeleton-value {
+  width: 40%;
+  height: 28px;
+  background-color: var(--bg-main);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  animation: pulseSkeleton 1.5s infinite;
+}
+
+.dashboard-stats-card.skeleton-loading .skeleton-subtitle {
+  width: 50%;
+  height: 10px;
+  background-color: var(--bg-main);
+  border-radius: 4px;
+  animation: pulseSkeleton 1.5s infinite;
+}
+
+@keyframes pulseSkeleton {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}

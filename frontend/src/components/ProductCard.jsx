@@ -8,15 +8,29 @@ function ProductCard({ product }) {
   const hasDiscount = product.discountPrice > 0;
   const hasRating = product.rating > 0;
 
+  const getProductImage = () => {
+    const firstImg = product.images?.[0];
+    if (typeof firstImg === "string") return firstImg;
+    if (firstImg?.url) return firstImg.url;
+    if (product.image) return product.image;
+    return "/images/saree1.jpg";
+  };
+
   return (
     <div className={`product-card${isOutOfStock ? " product-card--oos" : ""}`}>
 
       {/* ── Image Zone ── */}
       <div className="product-card__image-wrap">
         <img
-          src={product.images?.[0]?.url || product.image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"}
+          src={getProductImage()}
           alt={product.title}
           loading="lazy"
+          onError={(e) => {
+            if (e.currentTarget.getAttribute("data-fallback") !== "true") {
+              e.currentTarget.setAttribute("data-fallback", "true");
+              e.currentTarget.src = "/images/saree1.jpg";
+            }
+          }}
         />
 
         {/* Overlay badges on image */}

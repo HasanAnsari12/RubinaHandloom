@@ -1,21 +1,24 @@
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/admin/Sidebar";
 import Topbar from "../components/admin/Topbar";
 import "./AdminLayout.css";
 
 const AdminLayout = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <div className="admin-layout-wrapper">
-      {/* Navigation Sidebar */}
-      <Sidebar />
+    <div className="luxury-layout-wrapper">
+      {/* Navigation Sidebar Drawer */}
+      <Sidebar isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      {/* Main Layout Area */}
-      <div className="admin-layout-main">
-        {/* Top bar header */}
-        <Topbar />
+      {/* Main Content Body Frame */}
+      <div className="luxury-layout-main">
+        {/* Sticky Header Topbar */}
+        <Topbar onMenuToggle={() => setIsMenuOpen(!isMenuOpen)} />
 
-        {/* Dynamic page contents */}
-        <main className="admin-page-content">
+        {/* Dynamic Inner Pages Outlet */}
+        <main className="luxury-page-content">
           <Outlet />
         </main>
       </div>

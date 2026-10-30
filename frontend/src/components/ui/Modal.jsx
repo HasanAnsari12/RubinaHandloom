@@ -1,5 +1,5 @@
 // frontend/src/components/ui/Modal.jsx
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 function Modal({ isOpen, onClose, title, children }) {
   // Handle ESC key press

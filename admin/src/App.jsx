@@ -15,9 +15,12 @@ import EditProduct from "./pages/Products/EditProduct";
 import ManageOrders from "./pages/Orders/ManageOrders";
 import ManageUsers from "./pages/Users/ManageUsers";
 import ManageCategories from "./pages/Categories/ManageCategories";
+import ManageCoupons from "./pages/Coupons/ManageCoupons";
 import ManageReviews from "./pages/Reviews/ManageReviews";
 import Analytics from "./pages/Analytics";
-import Settings from "./pages/Settings";
+import Reports from "./pages/Reports/Reports";
+import Inventory from "./pages/Inventory/Inventory";
+import Settings from "./pages/Settings/Settings";
 import NotFound from "./pages/NotFound";
 
 function App() {
@@ -38,8 +41,11 @@ function App() {
               <Route path="orders" element={<ManageOrders />} />
               <Route path="users" element={<ManageUsers />} />
               <Route path="categories" element={<ManageCategories />} />
+              <Route path="coupons" element={<ManageCoupons />} />
               <Route path="reviews" element={<ManageReviews />} />
               <Route path="analytics" element={<Analytics />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="inventory" element={<Inventory />} />
               <Route path="settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Route>

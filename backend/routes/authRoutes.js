@@ -13,11 +13,16 @@ const {
 } = require("../controllers/authController");
 
 const { protect } = require("../middleware/authMiddleware");
-const { validateForgotPassword, validateResetPassword } = require("../validators/authValidator");
+const {
+  validateRegister,
+  validateLogin,
+  validateForgotPassword,
+  validateResetPassword,
+} = require("../validators/authValidator");
 
 const forgotPasswordLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5,
+  max: 10,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -27,12 +32,47 @@ const forgotPasswordLimiter = rateLimit({
   },
 });
 
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // 30 attempts per 15 min
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true, // Crucial: Successful logins don't consume lockout slots!
+  message: {
+    success: false,
+    message: "Too many failed login attempts. Please try again after 15 minutes.",
+  },
+});
+
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 15,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many registration attempts. Please try again after an hour.",
+  },
+});
+
+const resendVerificationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message:
+      "Too many verification email requests. Please try again after 15 minutes.",
+  },
+});
+
 const router = express.Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post("/register", registerLimiter, validateRegister, registerUser);
+router.post("/login", loginLimiter, validateLogin, loginUser);
 router.get("/verify-email/:token", verifyEmail);
-router.post("/resend-verification", resendVerificationEmail);
+router.post("/resend-verification", resendVerificationLimiter, resendVerificationEmail);
 
 router.post("/forgot-password", forgotPasswordLimiter, validateForgotPassword, forgotPassword);
 router.get("/reset-password/:token", checkResetToken);

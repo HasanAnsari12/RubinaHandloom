@@ -1,0 +1,128 @@
+.recent-orders-card-wrapper {
+  width: 100%;
+}
+
+.recent-orders-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.recent-orders-empty span {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.recent-orders-empty p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.recent-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.recent-order-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  padding: 10px 14px;
+  gap: 16px;
+  text-align: left;
+}
+
+.recent-order-left-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.recent-order-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-medium);
+  flex-shrink: 0;
+}
+
+.recent-order-avatar-fallback {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--primary-glow);
+  color: var(--primary);
+  border: 1px solid rgba(123, 30, 58, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.recent-order-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-order-user-info strong {
+  font-size: 13px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.recent-order-user-info span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.recent-order-middle-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 70px;
+}
+
+.recent-order-middle-amount strong {
+  font-size: 13px;
+  color: var(--primary);
+}
+
+.recent-order-middle-amount span {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.recent-order-right-badge {
+  flex-shrink: 0;
+}
+
+/* Skeleton Loading states */
+.recent-orders-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-order-row {
+  height: 48px;
+  background-color: var(--bg-main);
+  border-radius: var(--border-radius-sm);
+}

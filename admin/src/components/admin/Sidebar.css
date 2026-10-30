@@ -1,73 +1,173 @@
-.admin-sidebar {
-  width: 260px;
-  background: #111;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
+.luxury-sidebar {
+  width: 280px;
   height: 100vh;
   position: fixed;
-  top: 0;
   left: 0;
-  border-right: 1px solid #222;
-  z-index: 100;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
-}
-
-.sidebar-brand {
-  padding: 30px 24px;
-  border-bottom: 1px solid #222;
-}
-
-.sidebar-brand h2 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-  margin: 0;
-}
-
-.sidebar-brand span {
-  font-size: 11px;
-  color: #7b0f1a;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 600;
-  margin-top: 4px;
-  display: block;
-}
-
-.sidebar-nav {
-  flex: 1;
-  padding: 24px 16px;
+  top: 0;
+  background-color: var(--card-bg);
+  border-right: var(--border-medium);
+  z-index: 95;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  transition: var(--transition-smooth);
+}
+
+/* Brand header section styling */
+.sidebar-brand-header {
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: var(--border-light);
+  position: relative;
+}
+
+.brand-logo-container {
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary);
+  border: 1.5px solid var(--accent);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  animation: pulseGlow 3s infinite;
+}
+
+.brand-logo-symbol {
+  font-size: 18px;
+}
+
+.brand-name-info h2 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+}
+
+.brand-name-info span {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-top: -2px;
+}
+
+.sidebar-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Scrollable menu nav */
+.sidebar-menu-nav {
+  flex: 1;
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   overflow-y: auto;
 }
 
-.nav-item {
+.menu-link-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   padding: 12px 16px;
-  color: #bbb;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: all 0.25s ease;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
 }
 
-.nav-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+.menu-link-item:hover {
+  background-color: var(--bg-main);
+  color: var(--primary);
   transform: translateX(4px);
 }
 
-.nav-item.active {
-  background: #7b0f1a;
-  color: #fff;
+.menu-link-item.active {
+  background-color: var(--primary-glow);
+  color: var(--primary);
+  position: relative;
 }
 
-.nav-icon {
+.menu-link-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  height: 50%;
+  width: 3px;
+  background-color: var(--primary);
+  border-radius: 0 4px 4px 0;
+}
+
+.menu-icon-span {
   font-size: 16px;
+}
+
+.menu-label-span {
+  letter-spacing: 0.2px;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background-color: var(--border-light);
+  margin: 12px 0;
+}
+
+.logout-sidebar-btn {
+  color: var(--danger);
+  margin-top: auto;
+}
+
+.logout-sidebar-btn:hover {
+  background-color: var(--danger-glow);
+  color: var(--danger);
+}
+
+/* Backdrop for mobile drawer overlay */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Responsiveness */
+@media (max-width: 991px) {
+  .luxury-sidebar {
+    transform: translateX(-100%);
+  }
+  .luxury-sidebar.open {
+    transform: translateX(0);
+  }
+  .sidebar-close-btn {
+    display: block;
+  }
 }

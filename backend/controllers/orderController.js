@@ -48,12 +48,18 @@ const placeOrder = async (req, res) => {
         });
       }
 
-      subtotal += product.price * item.quantity;
+      // Authoritative pricing: respect discountPrice if active, otherwise use standard price
+      const unitPrice =
+        product.discountPrice && product.discountPrice > 0
+          ? Number(product.discountPrice)
+          : Number(product.price);
+
+      subtotal += unitPrice * item.quantity;
 
       orderItems.push({
         product: product._id,
         quantity: item.quantity,
-        priceAtPurchase: product.price,
+        priceAtPurchase: unitPrice,
       });
     }
 
@@ -63,9 +69,9 @@ const placeOrder = async (req, res) => {
     let coupon = null;
 
     if (couponCode) {
-      coupon = await Coupon.findOne({ code: couponCode.toUpperCase() });
+      coupon = await Coupon.findOne({ code: couponCode.trim().toUpperCase(), isDeleted: { $ne: true } });
       
-      if (!coupon || !coupon.isActive || coupon.expiryDate < new Date()) {
+      if (!coupon || coupon.status !== "Active" || coupon.validUntil < new Date()) {
         return res.status(400).json({
           success: false,
           message: "Invalid or expired coupon code",
@@ -86,12 +92,12 @@ const placeOrder = async (req, res) => {
         });
       }
 
-      if (coupon.discountType === "percentage") {
+      if (coupon.discountType === "Percentage") {
         discount = (subtotal * coupon.discountValue) / 100;
-        if (coupon.maximumDiscount) {
-          discount = Math.min(discount, coupon.maximumDiscount);
+        if (coupon.maximumDiscountAmount) {
+          discount = Math.min(discount, coupon.maximumDiscountAmount);
         }
-      } else if (coupon.discountType === "fixed") {
+      } else if (coupon.discountType === "Flat") {
         discount = coupon.discountValue;
       }
 
@@ -99,14 +105,42 @@ const placeOrder = async (req, res) => {
       couponId = coupon._id;
     }
 
-    // 4. Calculate shipping charge (Standard: ₹199, matching frontend Cart.jsx)
-    const shippingCharge = subtotal > 0 ? 199 : 0;
+    // 4. Calculate shipping charge (Free Shipping: ₹0)
+    const shippingCharge = 0;
     const totalAmount = subtotal - discount + shippingCharge;
 
-    // 5. Decrement inventory stock count
-    for (const item of cart.cartItems) {
-      await Product.findByIdAndUpdate(item.product._id, {
-        $inc: { stock: -item.quantity },
+    // 5. Decrement inventory stock count atomically with rollback to prevent negative inventory
+    const decrementedProducts = [];
+    try {
+      for (const item of cart.cartItems) {
+        const updatedProduct = await Product.findOneAndUpdate(
+          { _id: item.product._id, stock: { $gte: item.quantity } },
+          { $inc: { stock: -item.quantity } },
+          { new: true }
+        );
+
+        if (!updatedProduct) {
+          throw new Error(
+            `Insufficient stock for ${item.product.title || "product"}. Order could not be fulfilled.`
+          );
+        }
+
+        decrementedProducts.push({
+          productId: item.product._id,
+          quantity: item.quantity,
+        });
+      }
+    } catch (stockError) {
+      // Rollback any successfully decremented items
+      for (const rollbackItem of decrementedProducts) {
+        await Product.findByIdAndUpdate(rollbackItem.productId, {
+          $inc: { stock: rollbackItem.quantity },
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: stockError.message,
       });
     }
 
@@ -129,6 +163,7 @@ const placeOrder = async (req, res) => {
       shippingCharge,
       totalAmount,
       coupon: couponId,
+      isStockDecremented: true,
     });
 
     // 8. Truncate user's cart array (checkout complete)
@@ -268,11 +303,19 @@ const cancelOrder = async (req, res) => {
       });
     }
 
-    // Increment stocks back to catalog inventory
-    for (const item of order.orderItems) {
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: item.quantity },
-      });
+    // Increment stocks back to catalog inventory ONLY if inventory was actually decremented
+    const shouldRestock =
+      order.isStockDecremented === true ||
+      (order.isStockDecremented === undefined &&
+        (order.paymentStatus === "Paid" || order.paymentMethod === "COD"));
+
+    if (shouldRestock) {
+      for (const item of order.orderItems) {
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: item.quantity },
+        });
+      }
+      order.isStockDecremented = false;
     }
 
     order.orderStatus = "Cancelled";
@@ -348,12 +391,20 @@ const updateOrderStatus = async (req, res) => {
         });
       }
 
-      // If status is updated to Cancelled, return stock back to inventory
+      // If status is updated to Cancelled, return stock back to inventory ONLY if it was decremented
       if (orderStatus === "Cancelled" && order.orderStatus !== "Cancelled") {
-        for (const item of order.orderItems) {
-          await Product.findByIdAndUpdate(item.product, {
-            $inc: { stock: item.quantity },
-          });
+        const shouldRestock =
+          order.isStockDecremented === true ||
+          (order.isStockDecremented === undefined &&
+            (order.paymentStatus === "Paid" || order.paymentMethod === "COD"));
+
+        if (shouldRestock) {
+          for (const item of order.orderItems) {
+            await Product.findByIdAndUpdate(item.product, {
+              $inc: { stock: item.quantity },
+            });
+          }
+          order.isStockDecremented = false;
         }
       }
       // If status was Cancelled and is updated back to active, verify and deduct stock
@@ -372,6 +423,7 @@ const updateOrderStatus = async (req, res) => {
             $inc: { stock: -item.quantity },
           });
         }
+        order.isStockDecremented = true;
       }
 
       order.orderStatus = orderStatus;

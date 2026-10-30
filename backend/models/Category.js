@@ -19,6 +19,28 @@ const categorySchema = new mongoose.Schema(
       lowercase: true,
       index: true,
     },
+    image: {
+      url: {
+        type: String,
+        default: "",
+      },
+      public_id: {
+        type: String,
+        default: "",
+      },
+    },
+    status: {
+      type: String,
+      enum: ["Active", "Inactive", "Hidden"],
+      default: "Active",
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

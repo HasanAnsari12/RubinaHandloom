@@ -1,12 +1,11 @@
 // frontend/src/pages/Wishlist.jsx
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppContext } from "../context/AppContext";
 import "./Wishlist.css";
 
 function Wishlist() {
-  const navigate = useNavigate();
   const { wishlist, removeFromWishlist } = useAppContext();
 
   // Remove product from wishlist
@@ -14,7 +13,7 @@ function Wishlist() {
     try {
       await removeFromWishlist(productId);
       toast.success("Removed from wishlist!");
-    } catch (err) {
+    } catch {
       toast.error("Failed to remove item.");
     }
   };
@@ -84,13 +83,19 @@ function Wishlist() {
                 <div className="wishlist-image-wrap">
                   <img
                     src={
-                      item.images?.[0]?.url ||
+                      (typeof item.images?.[0] === "string" ? item.images[0] : item.images?.[0]?.url) ||
                       item.image ||
-                      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
+                      "/images/saree1.jpg"
                     }
                     alt={item.title}
                     className="wishlist-image"
                     loading="lazy"
+                    onError={(e) => {
+                      if (e.currentTarget.getAttribute("data-fallback") !== "true") {
+                        e.currentTarget.setAttribute("data-fallback", "true");
+                        e.currentTarget.src = "/images/saree1.jpg";
+                      }
+                    }}
                   />
                   {isOutOfStock && (
                     <span className="wishlist-badge wishlist-badge--oos">Out of Stock</span>

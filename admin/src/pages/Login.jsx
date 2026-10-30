@@ -43,7 +43,7 @@ const Login = () => {
     <div className="admin-login-page">
       <div className="login-card">
         <div className="login-header">
-          <h2>Rubina Handloom</h2>
+          <h2>SRK Handloom</h2>
           <span>Admin Portal Login</span>
         </div>
 

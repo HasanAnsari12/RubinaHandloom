@@ -80,7 +80,7 @@ function Products({ searchTerm = "" }) {
     }
 
     return filtered;
-  }, [products, search, category, sortBy]);
+  }, [products, search, searchTerm, category, sortBy]);
 
   // -----------------------------
   // Pagination

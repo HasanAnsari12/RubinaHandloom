@@ -49,7 +49,7 @@ function Account() {
     marginTop: "10px",
   }}
 >
-  Rubina Handloom Member
+  SRK Handloom Member
 </p>
 
         <span className="member-badge">

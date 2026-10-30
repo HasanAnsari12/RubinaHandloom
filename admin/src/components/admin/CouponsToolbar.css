@@ -1,0 +1,199 @@
+.coupons-toolbar-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--border-light);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.coupons-filters-deck {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-select-filter {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  padding: 8px 14px;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.toolbar-select-filter:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.toolbar-refresh-btn {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+}
+
+.toolbar-refresh-btn:hover:not(:disabled) {
+  background-color: var(--bg-main);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.toolbar-refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-filters-btn-toolbar {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--danger);
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-fast);
+}
+
+.clear-filters-btn-toolbar:hover {
+  background-color: var(--danger-glow);
+}
+
+/* Spinner */
+.refresh-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(123, 30, 58, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: refreshSpin 0.8s linear infinite;
+  display: inline-block;
+}
+
+/* Right side actions */
+.toolbar-right-actions-deck {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Search Box */
+.toolbar-search-box-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  padding: 8px 14px;
+  width: 240px;
+  position: relative;
+  transition: var(--transition-smooth);
+}
+
+.toolbar-search-box-wrapper:focus-within {
+  background-color: var(--card-bg);
+  border-color: var(--primary-light);
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.toolbar-search-icon {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-right: 8px;
+}
+
+.toolbar-search-input {
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text-primary);
+  width: 100%;
+  font-weight: 500;
+}
+
+.toolbar-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.clear-search-x-btn {
+  background: none;
+  border: none;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  position: absolute;
+  right: 10px;
+}
+
+/* Add Button wine gradient */
+.add-coupon-header-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, #5c1429 100%);
+  border: 1px solid var(--primary);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 20px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(123, 30, 58, 0.25);
+}
+
+.add-coupon-header-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px var(--primary-glow);
+}
+
+.add-coupon-header-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 991px) {
+  .coupons-toolbar-container {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .toolbar-right-actions-deck {
+    width: 100%;
+  }
+  .toolbar-search-box-wrapper {
+    flex: 1;
+    width: auto;
+  }
+  .add-coupon-header-btn {
+    flex: 1;
+    text-align: center;
+  }
+  .coupons-filters-deck {
+    width: 100%;
+  }
+  .toolbar-select-filter,
+  .toolbar-refresh-btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+}

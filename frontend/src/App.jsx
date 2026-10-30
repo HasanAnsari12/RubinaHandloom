@@ -19,6 +19,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
 import Account from "./pages/Account";
 import EditProfile from "./pages/EditProfile";
 import AddressPage from "./pages/AddressPage";
@@ -74,6 +75,7 @@ function AppContent() {
         {/* Account */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/verify-email/:token" element={<VerifyEmail />} />
         <Route path="/account" element={<Account />} />
         <Route path="/account/edit" element={<EditProfile />} />
         <Route path="/account/address" element={<AddressPage />} />

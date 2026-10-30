@@ -1,0 +1,98 @@
+.luxury-stat-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--border-light);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140px;
+  transition: var(--transition-smooth);
+}
+
+.luxury-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(123, 30, 58, 0.12);
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-card-icon-wrapper {
+  font-size: 20px;
+  width: 38px;
+  height: 38px;
+  background-color: var(--bg-main);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-light);
+  color: var(--primary);
+  transition: var(--transition-fast);
+}
+
+.luxury-stat-card:hover .stat-card-icon-wrapper {
+  background-color: var(--primary);
+  color: var(--accent);
+  border-color: var(--primary);
+}
+
+.stat-card-value {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+.stat-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stat-card-trend-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.stat-card-trend-badge.positive {
+  background-color: var(--success-glow);
+  color: var(--success);
+}
+
+.stat-card-trend-badge.negative {
+  background-color: var(--danger-glow);
+  color: var(--danger);
+}
+
+.stat-card-trend-badge.neutral {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--text-secondary);
+}
+
+.stat-card-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+}

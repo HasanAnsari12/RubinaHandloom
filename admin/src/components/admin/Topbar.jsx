@@ -1,25 +1,25 @@
-import { useAuth } from "../../hooks/useAuth";
+import React from "react";
+import SearchBar from "./SearchBar";
+import NotificationBell from "./NotificationBell";
+import ThemeToggle from "./ThemeToggle";
+import ProfileDropdown from "./ProfileDropdown";
 import "./Topbar.css";
 
-const Topbar = () => {
-  const { currentAdmin, logout } = useAuth();
-
+const Topbar = ({ onMenuToggle }) => {
   return (
-    <header className="admin-topbar">
-      <div className="topbar-left">
-        <span className="topbar-welcome">System Active</span>
+    <header className="luxury-topbar">
+      <div className="topbar-left-section">
+        <button className="mobile-menu-toggle-btn" onClick={onMenuToggle} aria-label="Toggle Sidebar">
+          ☰
+        </button>
+        <SearchBar />
       </div>
 
-      <div className="topbar-right">
-        {currentAdmin && (
-          <div className="admin-profile-info">
-            <span className="admin-avatar">👤</span>
-            <span className="admin-name">{currentAdmin.name}</span>
-          </div>
-        )}
-        <button className="logout-btn" onClick={logout}>
-          Logout 🚪
-        </button>
+      <div className="topbar-right-section">
+        <ThemeToggle />
+        <NotificationBell />
+        <div className="divider-line"></div>
+        <ProfileDropdown />
       </div>
     </header>
   );

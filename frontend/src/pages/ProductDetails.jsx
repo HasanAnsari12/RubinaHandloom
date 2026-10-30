@@ -28,10 +28,13 @@ function ProductDetails() {
         setProduct(fetchedProduct);
 
         // First image ko default selected image banao
-        setSelectedImage(
-          fetchedProduct.images?.[0]?.url ||
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80"
-        );
+        const firstImg = fetchedProduct.images?.[0];
+        const defaultImgUrl =
+          (typeof firstImg === "string" ? firstImg : firstImg?.url) ||
+          fetchedProduct.image ||
+          "/images/saree1.jpg";
+
+        setSelectedImage(defaultImgUrl);
       } catch (err) {
         setError(
           err.response?.data?.message ||
@@ -117,7 +120,7 @@ function ProductDetails() {
         await addToWishlist(product);
         toast.success("Added to wishlist!");
       }
-    } catch (err) {
+    } catch {
       toast.error("Failed to update wishlist.");
     }
   };
@@ -198,6 +201,12 @@ function ProductDetails() {
               src={selectedImage}
               alt={product.title}
               className="pd-main-image"
+              onError={(e) => {
+                if (e.currentTarget.getAttribute("data-fallback") !== "true") {
+                  e.currentTarget.setAttribute("data-fallback", "true");
+                  e.currentTarget.src = "/images/saree1.jpg";
+                }
+              }}
             />
             {isOutOfStock && (
               <span className="pd-image-badge pd-image-badge--oos">Out of Stock</span>
@@ -210,15 +219,24 @@ function ProductDetails() {
           {/* Thumbnails */}
           {product.images?.length > 1 && (
             <div className="pd-thumbnails">
-              {product.images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img.url}
-                  alt={`${product.title} view ${index + 1}`}
-                  className={selectedImage === img.url ? "pd-thumbnail active" : "pd-thumbnail"}
-                  onClick={() => setSelectedImage(img.url)}
-                />
-              ))}
+              {product.images.map((img, index) => {
+                const imgUrl = typeof img === "string" ? img : img?.url || "/images/saree1.jpg";
+                return (
+                  <img
+                    key={index}
+                    src={imgUrl}
+                    alt={`${product.title} view ${index + 1}`}
+                    className={selectedImage === imgUrl ? "pd-thumbnail active" : "pd-thumbnail"}
+                    onClick={() => setSelectedImage(imgUrl)}
+                    onError={(e) => {
+                      if (e.currentTarget.getAttribute("data-fallback") !== "true") {
+                        e.currentTarget.setAttribute("data-fallback", "true");
+                        e.currentTarget.src = "/images/saree1.jpg";
+                      }
+                    }}
+                  />
+                );
+              })}
             </div>
           )}
         </div>

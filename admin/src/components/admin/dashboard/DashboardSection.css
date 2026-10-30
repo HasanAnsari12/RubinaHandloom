@@ -1,0 +1,112 @@
+.dashboard-section-card {
+  background-color: var(--card-bg);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.dashboard-section-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-section-header {
+  padding: 18px 24px;
+  border-bottom: var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.header-meta-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.header-meta-info h3 {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.header-meta-info p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 2px 0 0 0;
+}
+
+.header-actions-deck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-section-content {
+  flex: 1;
+  padding: 20px 24px;
+  position: relative;
+}
+
+/* Loading state */
+.section-loading-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.loading-bar-spin {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(123, 30, 58, 0.15);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: barSpin 0.8s linear infinite;
+}
+
+@keyframes barSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.section-empty-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.empty-emoji {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.section-empty-block h4 {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.section-empty-block p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 4px 0 0 0;
+}

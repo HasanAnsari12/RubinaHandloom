@@ -53,7 +53,7 @@ function Navbar({ searchTerm, setSearchTerm }) {
 
         {/* Logo */}
         <Link to="/" className="logo" onClick={() => setShowMobileMenu(false)}>
-          RUBINA
+          SRK Handloom
         </Link>
 
         {/* Search Box */}

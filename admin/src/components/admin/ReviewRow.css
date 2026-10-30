@@ -1,0 +1,111 @@
+.review-row-customer-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+
+.review-row-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-medium);
+}
+
+.review-row-avatar-fallback {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--primary-glow);
+  color: var(--primary);
+  border: 1px solid rgba(123, 30, 58, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.customer-row-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-row-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.customer-row-name:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.customer-row-email {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.review-row-product-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: left;
+  max-width: 150px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.review-row-comment-preview-cell {
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.review-row-date-cell {
+  color: var(--text-secondary);
+}
+
+.review-row-actions-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.row-action-btn.quick-approve-btn {
+  color: var(--success);
+}
+
+.row-action-btn.quick-approve-btn:hover {
+  background-color: var(--success-glow);
+  border-color: var(--success);
+}
+
+.row-action-btn.quick-reject-btn {
+  color: var(--danger);
+}
+
+.row-action-btn.quick-reject-btn:hover {
+  background-color: var(--danger-glow);
+  border-color: var(--danger);
+}
+
+.row-action-btn.quick-hide-btn {
+  color: var(--text-muted);
+}
+
+.row-action-btn.quick-hide-btn:hover {
+  background-color: var(--bg-main);
+  border-color: var(--border-medium);
+}

@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { checkResetToken, resetPassword } from "../services/authService";
 import { toast } from "react-toastify";
 import "./ForgotPassword.css";
 
 function ResetPassword() {
   const { token } = useParams();
-  const navigate = useNavigate();
 
   const [checkingToken, setCheckingToken] = useState(true);
   const [isTokenValid, setIsTokenValid] = useState(false);
@@ -47,7 +46,7 @@ function ResetPassword() {
       try {
         await checkResetToken(token);
         setIsTokenValid(true);
-      } catch (err) {
+      } catch {
         setIsTokenValid(false);
       } finally {
         setCheckingToken(false);
@@ -79,7 +78,7 @@ function ResetPassword() {
     return (
       <div className="forgot-page">
         <div className="forgot-card">
-          <div className="forgot-logo">RUBINA</div>
+          <div className="forgot-logo">SRK Handloom</div>
           <p className="forgot-subtitle" style={{ marginTop: "20px" }}>
             Validating security token...
           </p>
@@ -92,7 +91,7 @@ function ResetPassword() {
     return (
       <div className="forgot-page">
         <div className="forgot-card">
-          <div className="forgot-logo">RUBINA</div>
+          <div className="forgot-logo">SRK Handloom</div>
           <div className="forgot-error-state" style={{ marginTop: "24px" }}>
             <div className="error-icon-wrapper">✗</div>
             <h1>Verification Failed</h1>
@@ -111,7 +110,7 @@ function ResetPassword() {
   return (
     <div className="forgot-page">
       <div className="forgot-card">
-        <div className="forgot-logo">RUBINA</div>
+        <div className="forgot-logo">SRK Handloom</div>
 
         {!success ? (
           <>

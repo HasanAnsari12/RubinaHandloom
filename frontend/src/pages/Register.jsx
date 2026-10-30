@@ -4,12 +4,10 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { registerUser } from "../services/authService";
-import { useAppContext } from "../context/AppContext";
 import "./Register.css";
 
 function Register() {
   const navigate = useNavigate();
-  const { login } = useAppContext();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -75,10 +73,10 @@ function Register() {
         {/* 55% Form Section */}
         <div className="register-form-panel">
           <div className="register-card">
-            <div className="register-logo-mobile">RUBINA</div>
+            <div className="register-logo-mobile">SRK Handloom</div>
             <h2>Create Account</h2>
             <p className="register-subtitle">
-              Start your handloom journey with Rubina.
+              Start your handloom journey with SRK Handloom.
             </p>
 
             {error && (

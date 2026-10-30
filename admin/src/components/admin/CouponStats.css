@@ -1,0 +1,155 @@
+.coupon-stats-deck-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.coupon-stats-grid-five {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.coupon-stats-grid-row-secondary {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+}
+
+/* Secondary KPI card layouts */
+.stats-mini-summary-card,
+.stats-performance-kpi-card {
+  background-color: var(--card-bg);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.mini-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.mini-summary-stats-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mini-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mini-stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.mini-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.mini-stat-value.danger-text {
+  color: var(--danger);
+}
+
+.mini-stat-value.warning-text {
+  color: var(--warning);
+}
+
+/* KPI Column layout */
+.stats-performance-kpi-card {
+  flex-direction: row;
+  align-items: center;
+  padding: 18px 32px;
+  gap: 32px;
+}
+
+.performance-kpi-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.kpi-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.kpi-value {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 4px;
+  line-height: 1.2;
+}
+
+.kpi-value.code-font {
+  font-family: monospace;
+  color: var(--primary);
+  background-color: var(--primary-glow);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.kpi-subtext {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.performance-kpi-divider {
+  width: 1px;
+  height: 48px;
+  background-color: var(--border-light);
+}
+
+@media (max-width: 991px) {
+  .coupon-stats-grid-five {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .coupon-stats-grid-row-secondary {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .coupon-stats-grid-five {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats-performance-kpi-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .performance-kpi-divider {
+    width: 100%;
+    height: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .coupon-stats-grid-five {
+    grid-template-columns: 1fr;
+  }
+}

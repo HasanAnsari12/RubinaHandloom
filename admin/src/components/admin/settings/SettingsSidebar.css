@@ -1,0 +1,89 @@
+.settings-sidebar {
+  width: 230px;
+  min-width: 200px;
+  background-color: var(--card-bg);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.settings-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px;
+  border-bottom: var(--border-light);
+  background: linear-gradient(135deg, var(--primary) 0%, #5B1429 100%);
+}
+
+.settings-sidebar-icon {
+  font-size: 18px;
+}
+
+.settings-sidebar-title {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.settings-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+.settings-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  position: relative;
+  transition: var(--transition-fast);
+  border-left: 3px solid transparent;
+}
+
+.settings-tab-btn:hover {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.settings-tab-btn.active {
+  background-color: var(--primary-glow);
+  color: var(--primary);
+  border-left-color: var(--primary);
+  font-weight: 700;
+}
+
+.settings-tab-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.settings-tab-label {
+  flex: 1;
+}
+
+.settings-tab-active-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  margin-left: auto;
+}

@@ -1,0 +1,96 @@
+.top-selling-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--border-light);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.top-selling-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top-selling-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.premium-label-badge {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent);
+  background-color: var(--accent-glow);
+  padding: 4px 8px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.top-selling-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top-selling-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: var(--transition-fast);
+}
+
+.top-selling-item:hover {
+  transform: translateX(4px);
+}
+
+.top-selling-img {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-sm);
+  object-fit: cover;
+  border: var(--border-light);
+}
+
+.top-selling-info {
+  flex: 1;
+  text-align: left;
+}
+
+.top-selling-info h4 {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.top-selling-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.sales-count {
+  color: var(--text-secondary);
+}
+
+.rating-span {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.top-selling-rev {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}

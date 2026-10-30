@@ -103,7 +103,7 @@ function Login() {
         {/* 55% Login Form Section */}
         <div className="login-form-panel">
           <div className="login-card">
-            <div className="login-logo-mobile">RUBINA</div>
+            <div className="login-logo-mobile">SRK Handloom</div>
             <h2>Welcome Back</h2>
             <p className="login-subtitle">
               Sign in to access your account.

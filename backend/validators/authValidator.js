@@ -33,8 +33,8 @@ const validateRegister = (req, res, next) => {
     });
   }
 
-  email = email.trim();
-  req.body.email = email; // Update req.body with trimmed value
+  email = email.trim().toLowerCase();
+  req.body.email = email; // Update req.body with trimmed and lowercased value
 
   if (email.length > 100) {
     return res.status(400).json({
@@ -79,8 +79,8 @@ const validateLogin = (req, res, next) => {
     });
   }
 
-  email = email.trim();
-  req.body.email = email; // Update req.body with trimmed value
+  email = email.trim().toLowerCase();
+  req.body.email = email; // Update req.body with trimmed and lowercased value
 
   if (email.length > 100) {
     return res.status(400).json({
@@ -118,8 +118,8 @@ const validateForgotPassword = (req, res, next) => {
     });
   }
 
-  email = email.trim();
-  req.body.email = email; // Update req.body with trimmed value
+  email = email.trim().toLowerCase();
+  req.body.email = email; // Update req.body with trimmed and lowercased value
 
   if (email.length > 100) {
     return res.status(400).json({

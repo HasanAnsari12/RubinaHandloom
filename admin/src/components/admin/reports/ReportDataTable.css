@@ -1,0 +1,120 @@
+.report-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.report-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--card-bg);
+  font-size: 13px;
+  min-width: 600px;
+}
+
+.report-data-table thead tr {
+  border-bottom: 2px solid var(--border-medium);
+}
+
+.report-data-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  background-color: var(--bg-main);
+}
+
+.report-data-table td {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  border-bottom: var(--border-light);
+  vertical-align: middle;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-data-table tbody tr:hover {
+  background-color: var(--bg-main);
+}
+
+.report-data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.report-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Loading skeleton */
+.report-table-loading {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.report-table-skeleton-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.report-table-skeleton-cell {
+  height: 14px;
+  flex: 1;
+  background-color: var(--bg-main);
+  border-radius: 4px;
+  animation: pulseSkeleton 1.5s infinite;
+}
+
+@keyframes pulseSkeleton {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Empty state */
+.empty-report-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--border-light);
+}
+
+.empty-report-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.empty-report-placeholder h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+}
+
+.empty-report-placeholder p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}

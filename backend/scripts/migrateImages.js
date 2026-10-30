@@ -16,7 +16,7 @@ async function runMigration() {
   let connection;
   try {
     console.log("Connecting to MongoDB Atlas for database migration...");
-    connection = await mongoose.connect(MONGO_URI, { tlsAllowInvalidCertificates: true });
+    connection = await mongoose.connect(MONGO_URI);
     console.log("Connected successfully to MongoDB Atlas!");
 
     // Get the dynamic Product model (disable strict schema mapping to read raw documents)

@@ -33,6 +33,22 @@ const protect = async (req, res, next) => {
       });
     }
 
+    // Reject soft-deleted user accounts
+    if (req.user.isDeleted) {
+      return res.status(401).json({
+        success: false,
+        message: "User account no longer exists",
+      });
+    }
+
+    // Reject blocked user accounts
+    if (req.user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been blocked. Please contact support.",
+      });
+    }
+
     // Invalidate token if password was changed after token issue date
     if (req.user.passwordChangedAt) {
       const changedTimestamp = Math.floor(req.user.passwordChangedAt.getTime() / 1000);

@@ -1,0 +1,105 @@
+.top-selling-products-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.dashboard-metrics-datatable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.dashboard-metrics-datatable th {
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-medium);
+}
+
+.dashboard-metrics-datatable td {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+
+.dashboard-metrics-datatable tr:hover td {
+  background-color: var(--bg-main);
+}
+
+.top-product-details-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-product-row-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--border-medium);
+}
+
+.top-product-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.top-product-meta strong {
+  font-size: 13px;
+  color: var(--text-primary);
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-product-meta span {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.top-product-category-lbl {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-medium);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.sold-units-count-text {
+  color: var(--text-primary);
+}
+
+.revenue-gain-value-text {
+  color: var(--primary);
+}
+
+.no-records-row {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 30px 0 !important;
+}
+
+/* Skeleton Loading styles */
+.table-skeleton-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.skeleton-row-line {
+  height: 20px;
+  background-color: var(--bg-main);
+  border-radius: 4px;
+  width: 100%;
+}

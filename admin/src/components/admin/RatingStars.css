@@ -1,0 +1,64 @@
+.rating-stars-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars-flex-row {
+  display: flex;
+  align-items: center;
+}
+
+.star-symbol-element {
+  color: var(--border-medium);
+  font-size: inherit;
+  transition: transform 0.15s ease, color 0.15s ease;
+  user-select: none;
+}
+
+.star-symbol-element.interactive {
+  cursor: pointer;
+}
+
+.star-symbol-element.interactive:hover {
+  transform: scale(1.2);
+}
+
+/* Star Fill Colors */
+.star-symbol-element.star-full {
+  color: #D4AF37; /* Luxury Gold fill */
+}
+
+.star-symbol-element.star-half {
+  position: relative;
+  color: var(--border-medium);
+}
+
+.star-symbol-element.star-half::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #D4AF37;
+}
+
+.rating-value-indicator {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Sizing Configurations */
+.rating-stars-wrapper.size-small {
+  font-size: 13px;
+}
+
+.rating-stars-wrapper.size-medium {
+  font-size: 18px;
+}
+
+.rating-stars-wrapper.size-large {
+  font-size: 26px;
+}

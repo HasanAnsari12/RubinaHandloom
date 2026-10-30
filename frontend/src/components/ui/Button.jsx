@@ -1,5 +1,4 @@
 // frontend/src/components/ui/Button.jsx
-import React from 'react';
 
 function Button({
   children,

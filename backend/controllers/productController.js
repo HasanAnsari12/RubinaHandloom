@@ -43,10 +43,37 @@ const getProductById = async (req, res) => {
   }
 };
 
+// Helper to determine if public_id belongs to Cloudinary
+const isCloudinaryPublicId = (publicId) => {
+  if (!publicId) return false;
+  if (publicId === "legacy" || publicId === "default" || publicId === "csv_import") return false;
+  if (publicId.startsWith("local_")) return false;
+  return true;
+};
+
 // Create product
 const createProduct = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
+    const { title, description, price, discountPrice, category, brand, stock, images, isFeatured } = req.body;
+
+    if (!title || !description || price === undefined || !category) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, description, price, and category are required fields.",
+      });
+    }
+
+    const product = await Product.create({
+      title,
+      description,
+      price: Number(price),
+      discountPrice: discountPrice ? Number(discountPrice) : 0,
+      category,
+      brand: brand || "Rubina Handloom",
+      stock: stock !== undefined ? Number(stock) : 0,
+      images: images || [],
+      isFeatured: Boolean(isFeatured),
+    });
 
     res.status(201).json({
       success: true,
@@ -54,7 +81,7 @@ const createProduct = async (req, res) => {
       product,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: error.message,
     });
@@ -83,7 +110,7 @@ const updateProduct = async (req, res) => {
       );
 
       for (const img of removedImages) {
-        if (img.public_id && img.public_id !== "legacy") {
+        if (isCloudinaryPublicId(img.public_id)) {
           try {
             await deleteImage(img.public_id);
           } catch (cloudinaryErr) {
@@ -97,6 +124,10 @@ const updateProduct = async (req, res) => {
     }
 
     // Apply updates and trigger validation rules on save
+    if (req.body.price !== undefined) req.body.price = Number(req.body.price);
+    if (req.body.discountPrice !== undefined) req.body.discountPrice = Number(req.body.discountPrice);
+    if (req.body.stock !== undefined) req.body.stock = Number(req.body.stock);
+
     Object.assign(product, req.body);
     await product.save();
 
@@ -106,7 +137,7 @@ const updateProduct = async (req, res) => {
       product,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: error.message,
     });
@@ -125,10 +156,10 @@ const deleteProduct = async (req, res) => {
       });
     }
 
-    // Delete associated images from Cloudinary
+    // Delete associated images from Cloudinary (if hosted on Cloudinary)
     if (product.images && product.images.length > 0) {
       for (const img of product.images) {
-        if (img.public_id) {
+        if (isCloudinaryPublicId(img.public_id)) {
           try {
             await deleteImage(img.public_id);
           } catch (cloudinaryErr) {

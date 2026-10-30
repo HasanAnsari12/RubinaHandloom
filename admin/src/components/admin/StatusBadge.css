@@ -1,0 +1,57 @@
+.status-badge-generic {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.2px;
+  line-height: 1;
+}
+
+/* 4️⃣ Status Color Standard */
+.status-badge-generic.pending,
+.status-badge-generic.unpaid {
+  background-color: rgba(245, 158, 11, 0.08);
+  color: #F59E0B; /* Orange */
+  border: 1px solid rgba(245, 158, 11, 0.15);
+}
+
+.status-badge-generic.processing {
+  background-color: rgba(59, 130, 246, 0.08);
+  color: #3B82F6; /* Blue */
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.status-badge-generic.shipped {
+  background-color: rgba(139, 92, 246, 0.08);
+  color: #8B5CF6; /* Purple */
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.status-badge-generic.delivered,
+.status-badge-generic.paid {
+  background-color: rgba(22, 163, 74, 0.08);
+  color: #16A34A; /* Green */
+  border: 1px solid rgba(22, 163, 74, 0.15);
+}
+
+.status-badge-generic.cancelled,
+.status-badge-generic.failed {
+  background-color: rgba(220, 38, 38, 0.08);
+  color: #DC2626; /* Red */
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.status-badge-generic.refunded {
+  background-color: rgba(107, 104, 101, 0.08);
+  color: #6B6865; /* Gray */
+  border: 1px solid rgba(107, 104, 101, 0.15);
+}
+
+.status-badge-generic.draft {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}

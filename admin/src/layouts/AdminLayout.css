@@ -1,28 +1,33 @@
-.admin-layout-wrapper {
+.luxury-layout-wrapper {
   display: flex;
   min-height: 100vh;
-  background: #f7f7f8;
+  background-color: var(--bg-main);
+  transition: var(--transition-smooth);
 }
 
-.admin-layout-main {
+.luxury-layout-main {
   flex: 1;
-  margin-left: 260px; /* Width of the sidebar */
+  margin-left: 280px; /* Width of the luxury sidebar */
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Prevents flex items from breaking grid widths */
+  min-width: 0;
+  transition: var(--transition-smooth);
 }
 
-.admin-page-content {
+.luxury-page-content {
   flex: 1;
   padding: 40px;
-  overflow-y: auto;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
 }
 
-@media (max-width: 768px) {
-  .admin-layout-main {
+@media (max-width: 991px) {
+  .luxury-layout-main {
     margin-left: 0;
   }
-  .admin-sidebar {
-    display: none; /* Hide sidebar on mobile in migration phase */
+  .luxury-page-content {
+    padding: 24px 20px;
   }
 }

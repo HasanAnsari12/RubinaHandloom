@@ -1,0 +1,119 @@
+.order-timeline-stepper-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0;
+  padding: 10px 0;
+}
+
+.timeline-step-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.step-marker-ring {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border-medium);
+  background-color: var(--card-bg);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 2;
+  transition: var(--transition-smooth);
+}
+
+.step-label-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition-fast);
+}
+
+.step-line-divider {
+  position: absolute;
+  top: 15px;
+  left: calc(50% + 16px);
+  width: calc(100% - 32px);
+  height: 2px;
+  background-color: var(--border-medium);
+  z-index: 1;
+  transition: var(--transition-smooth);
+}
+
+/* Completed Steps */
+.timeline-step-node.step-completed .step-marker-ring {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.timeline-step-node.step-completed .step-label-text {
+  color: var(--success);
+}
+
+.timeline-step-node.step-completed .step-line-divider {
+  background-color: var(--success);
+}
+
+/* Active Step */
+.timeline-step-node.step-active .step-marker-ring {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 0 0 4px var(--primary-glow);
+  animation: pulseActiveStep 2s infinite;
+}
+
+.timeline-step-node.step-active .step-label-text {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+@keyframes pulseActiveStep {
+  0% { box-shadow: 0 0 0 0 rgba(123, 30, 58, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(123, 30, 58, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(123, 30, 58, 0); }
+}
+
+/* Cancelled Banner */
+.order-timeline-cancelled-banner {
+  background-color: var(--danger-glow);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  border-radius: var(--border-radius-sm);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.cancelled-symbol {
+  font-size: 24px;
+}
+
+.cancelled-banner-text h4 {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--danger);
+}
+
+.cancelled-banner-text p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.4;
+}

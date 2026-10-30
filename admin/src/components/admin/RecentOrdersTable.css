@@ -1,0 +1,175 @@
+.luxury-table-container {
+  width: 100%;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--border-light);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+.luxury-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 800px;
+}
+
+.luxury-table th {
+  padding: 16px 24px;
+  background-color: var(--bg-main);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: var(--border-medium);
+}
+
+.luxury-table td {
+  padding: 16px 24px;
+  border-bottom: var(--border-light);
+  font-size: 13px;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.luxury-table tr:last-child td {
+  border-bottom: none;
+}
+
+.luxury-table tr {
+  transition: var(--transition-fast);
+}
+
+.luxury-table tr:hover {
+  background-color: var(--primary-glow);
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.order-id-cell {
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.customer-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customer-avatar-letter {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #EBE8E3;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.customer-name {
+  font-weight: 600;
+}
+
+.customer-email {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.table-date-cell {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.table-amount-cell {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-badge.pending,
+.status-badge.processing {
+  background-color: var(--warning-glow);
+  color: var(--warning);
+}
+
+.status-badge.shipped {
+  background-color: var(--accent-glow);
+  color: var(--accent);
+}
+
+.status-badge.delivered {
+  background-color: var(--success-glow);
+  color: var(--success);
+}
+
+.status-badge.cancelled {
+  background-color: var(--danger-glow);
+  color: var(--danger);
+}
+
+/* Payment Statuses */
+.payment-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  position: relative;
+  padding-left: 12px;
+}
+
+.payment-badge::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.payment-badge.paid::before { background-color: var(--success); }
+.payment-badge.unpaid::before,
+.payment-badge.failed::before { background-color: var(--danger); }
+.payment-badge.pending::before { background-color: var(--warning); }
+
+.table-view-btn {
+  background-color: transparent;
+  border: 1px solid rgba(123, 30, 58, 0.15);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.table-view-btn:hover {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.table-empty-row {
+  text-align: center;
+  padding: 40px !important;
+  color: var(--text-secondary);
+}
